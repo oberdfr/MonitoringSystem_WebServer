@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title> STATS </title>
+    <link rel="stylesheet" href="style.css">
+  
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head>
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+        <img class="bx icon" src="img/Intuita_logo_white.webp" alt="Intuita_logo_white" height="60" width="150" style="margin-top: 6.5% ;">
+        <i class='bx bx-menu' id="btn" ></i>
+    </div>
+    <ul class="nav-list">
+      <li>
+          <i class='bx bx-search' ></i>
+         <input type="text" placeholder="Search...">
+         <span class="tooltip">Search</span>
+      </li>
+      <li>
+        <a href="dashboard.html">
+          <i class='bx bx-grid-alt'></i>
+          <span class="links_name">Dashboard</span>
+        </a>
+         <span class="tooltip">Dashboard</span>
+      </li>
+      <li>
+       <a href="air.html">
+         <i class='bx bx-user' ></i>
+         <span class="links_name">Aria</span>
+       </a>
+       <span class="tooltip">Aria</span>
+     </li>
+     <li>
+       <a href="cam.html">
+         <i class='bx bx-chat' ></i>
+         <span class="links_name">Camera</span>
+       </a>
+       <span class="tooltip">Camera</span>
+     </li>
+     <li>
+       <a href="rifiuti.html">
+         <i class='bx bx-pie-chart-alt-2' ></i>
+         <span class="links_name">Rifiuti</span>
+       </a>
+       <span class="tooltip">Rifiuti</span>
+     </li>
+   
+    
+    </ul>
+  </div>
+
+  <section class="home-section">
+    <div class="text">Cam</div>
+        <div id="risultato">
+          cam semiinterrato <iframe src="http://192.168.100.109:8000/bgr" id="ifr" height="365" width="645" allow="autoplay"></iframe>
+        </div>
+
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+  let sidebar = document.querySelector(".sidebar");
+  let closeBtn = document.querySelector("#btn");
+  let searchBtn = document.querySelector(".bx-search");
+  closeBtn.addEventListener("click", ()=>{
+    sidebar.classList.toggle("open");
+    menuBtnChange();
+  });
+  searchBtn.addEventListener("click", ()=>{ 
+    sidebar.classList.toggle("open");
+    menuBtnChange(); 
+  });
+  
+  function menuBtnChange() {
+   if(sidebar.classList.contains("open")){
+     closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+   }else {
+     closeBtn.classList.replace("bx-menu-alt-right","bx-menu");
+   }
+  }
+  </script>
+</body>
+</html>
