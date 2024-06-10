@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card Example</title>
+  <style>
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 18rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin: 20px;
+    }
+    .card iframe {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      width: 100%;
+      height: 365px;
+    }
+    .card-body {
+      padding: 15px;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .card-text {
+      margin-bottom: 1.25rem;
+      color: #666;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+      text-align: center;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="card-container"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Crea la card
+    var card = document.createElement('div');
+    card.className = 'card';
+
+    // Crea l'iframe
+    var iframe = document.createElement('iframe');
+    iframe.src = 'http://192.168.100.204:8000/bgr';
+    iframe.allow = 'autoplay';
+
+    // Aggiungi l'iframe alla card
+    card.appendChild(iframe);
+
+    // Crea il corpo della card
+    var cardBody = document.createElement('div');
+    cardBody.className = 'card-body';
+
+    // Crea il titolo della card
+    var cardTitle = document.createElement('h5');
+    cardTitle.className = 'card-title';
+    cardTitle.textContent = 'Card title';
+
+    // Crea il testo della card
+    var cardText = document.createElement('p');
+    cardText.className = 'card-text';
+    cardText.textContent = 'Some quick example text to build on the card title and make up the bulk of the card\'s content.';
+
+    // Crea il pulsante della card
+    var cardButton = document.createElement('a');
+    cardButton.className = 'btn';
+    cardButton.href = '#';
+    cardButton.textContent = 'Go somewhere';
+
+    // Aggiungi il titolo, il testo e il pulsante al corpo della card
+    cardBody.appendChild(cardTitle);
+    cardBody.appendChild(cardText);
+    cardBody.appendChild(cardButton);
+
+    // Aggiungi il corpo della card alla card
+    card.appendChild(cardBody);
+
+    // Aggiungi la card al container
+    document.getElementById('card-container').appendChild(card);
+  });
+</script>
+
+</body>
+</html>

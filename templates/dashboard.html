@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <title> STATS </title>
+  <link rel="stylesheet" href="static/css/style.css">
+
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <img class="bx icon" src="static/img/Intuita_logo_white.webp" alt="Intuita_logo_white" height="60" width="150"
+        style="margin-top: 6.5% ;">
+      <i class='bx bx-menu' id="btn"></i>
+    </div>
+    <ul class="nav-list">
+      <li>
+        <i class='bx bx-search'></i>
+        <input type="text" placeholder="Search...">
+        <span class="tooltip">Search</span>
+      </li>
+      <li>
+        <a href="dashboard.html">
+          <i class='bx bx-grid-alt'></i>
+          <span class="links_name">Dashboard</span>
+        </a>
+        <span class="tooltip">Dashboard</span>
+      </li>
+      <li>
+        <a href="air.html">
+          <i class='bx bx-user'></i>
+          <span class="links_name">Aria</span>
+        </a>
+        <span class="tooltip">Aria</span>
+      </li>
+      <li>
+        <a href="cam.html">
+          <i class='bx bx-chat'></i>
+          <span class="links_name">Camera</span>
+        </a>
+        <span class="tooltip">Camera</span>
+      </li>
+      <li>
+        <a href="rifiuti.html">
+          <i class='bx bx-pie-chart-alt-2'></i>
+          <span class="links_name">Rifiuti</span>
+        </a>
+        <span class="tooltip">Rifiuti</span>
+      </li>
+
+      <li class="profile" id="logout-button">
+        <div class="profile-details">
+          <t class="logout-text">
+            Log out
+          </t>
+        </div>
+        <i class='bx bx-log-out' id="log_out"></i>
+      </li>
+
+    </ul>
+  </div>
+  <section class="home-section">
+    <div class="text" align="center">Dashboard</div>
+    <div id="result_air">
+
+    </div>
+
+  </section>
+  <script src="static/js/dashboard.js">
+
+  </script>
+</body>
+
+</html>
