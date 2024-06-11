@@ -148,3 +148,25 @@ function logout() {
         })
         .catch(error => console.log("Error logging out:", error));
 }
+
+
+// percentage meters
+document.addEventListener('DOMContentLoaded', function () {
+    function setProgress(percentage) {
+        const circle = document.querySelector('.circular-chart .circle');
+        const text = document.querySelector('.circular-chart .percentage');
+
+        const radius = circle.r.baseVal.value;
+        const circumference = 2 * Math.PI * radius;
+
+        const offset = circumference - (percentage / 100) * circumference;
+
+        circle.style.strokeDasharray = `${circumference} ${circumference}`;
+        circle.style.strokeDashoffset = offset;
+        text.textContent = `${percentage}%`;
+    }
+
+    // Example usage:
+    const percentage = 65; // Replace this with the value you get from JavaScript
+    setProgress(percentage);
+});
