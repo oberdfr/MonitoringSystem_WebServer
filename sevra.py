@@ -73,7 +73,15 @@ def error():
 def getP():
     p = request.args.get("people")
     print(p)
-    return 1
+    return jsonify(status="people sent")
+
+@app.route('/sendbin')
+def getBin():
+    misCarta = request.args.get("miscarta")
+    misPlastica = request.args.get("misplastica")
+    print("carta: " + str(misCarta))
+    print("plastica: " + str(misPlastica))
+    return jsonify(status="bin mis sent")
 
 
 if __name__ == '__main__':
