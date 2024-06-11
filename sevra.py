@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, redirect, url_for, send_from_directory, session, render_template
 from flask_cors import CORS
 from flask_session import Session
+import json
+import os
 
 
 app = Flask(__name__)
@@ -17,6 +19,9 @@ Session(app)
 # Hardcoded credentials
 USERNAME = "admin"
 PASSWORD = "admin"
+
+# Define the path to the file that will store the data
+DATA_FILE = 'bin_data.json'
 
 @app.route("/login")
 def index():
@@ -75,17 +80,57 @@ def getP():
     print(p)
     return jsonify(status="people sent")
 
+# Function to read data from the file
+def read_data():
+    if os.path.exists(DATA_FILE):
+        try:
+            with open(DATA_FILE, 'r') as file:
+                data = json.load(file)
+        except (json.JSONDecodeError, IOError):
+            data = {"carta": [], "plastica": []}
+    else:
+        data = {"carta": [], "plastica": []}
+    return data
+
+# Function to write data to the file
+def write_data(data):
+    with open(DATA_FILE, 'w') as file:
+        json.dump(data, file)
+
 @app.route('/sendbin')
 def getBin():
-    misCarta = request.args.get("miscarta")
-    misPlastica = request.args.get("misplastica")
+    misCarta = int(request.args.get("miscarta", 0))
+    misPlastica = int(request.args.get("misplastica", 0))
+
+    data = read_data()
+    
+    # Update the carta values
+    data["carta"].append(misCarta)
+    if len(data["carta"]) > 10:
+        data["carta"].pop(0)
+    
+    # Update the plastica values
+    data["plastica"].append(misPlastica)
+    if len(data["plastica"]) > 10:
+        data["plastica"].pop(0)
+
+    write_data(data)
+    
     print("carta: " + str(misCarta))
     print("plastica: " + str(misPlastica))
     
-
     return jsonify(status="bin mis sent")
 
-
+@app.route('/latestbins')
+def latest_bins():
+    data = read_data()
+    latest_data = {
+        "carta": data["carta"][-1] if data["carta"] else 0,
+        "plastica": data["plastica"][-1] if data["plastica"] else 0
+    }
+    response = jsonify(latest_data)
+    response.headers['Cache-Control'] = 'no-store'
+    return response
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

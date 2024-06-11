@@ -165,10 +165,17 @@ function fillCircle(type, percentage) {
     }, 10);
 }
 
+function updateBinData() {
+    fetch('/latestbins')
+        .then(response => response.json())
+        .then(data => {
+            fillCircle('carta', data.carta);
+            fillCircle('plastica', data.plastica);
+        })
+        .catch(error => console.error('Error fetching bin data:', error));
+}
 
-// percentage meters
 document.addEventListener('DOMContentLoaded', function () {
-    
-    fillCircle('carta', 70); // Change 70 to the desired percentage
-    fillCircle('plastica', 85); // Change 85 to the desired percentage
+    updateBinData();
+    setInterval(updateBinData, 1 * 1000); // Update every 5 minutes
 });
