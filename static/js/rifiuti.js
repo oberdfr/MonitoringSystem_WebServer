@@ -160,8 +160,15 @@ function fillCircle(type, percentage) {
     circle.style.strokeDashoffset = `${circumference}`;
 
     setTimeout(() => {
+        //console.log(circle.style.strokeDashoffset);
+        //console.log(`${offset}`);
+        //console.log(text.textContent);
+        //console.log(`${percentage}%`);
+        //if (text.textContent != `${percentage}%`) {
         circle.style.strokeDashoffset = `${offset}`;
         text.textContent = `${percentage}%`;
+        //}
+
     }, 10);
 }
 
