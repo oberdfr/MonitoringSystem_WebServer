@@ -11,26 +11,22 @@ for (let i = 1; i < 3; i++) {
     document.addEventListener("DOMContentLoaded", function () {
         // Crea la card
         var card = document.createElement('div');
+        card.classList.add('card');
+        card.classList.add('card');
 
-        if (i == 1) {
-            card.className = 'cardLeft';
-        } else if (i == 2) {
-            card.className = 'cardLeft';
-        }
-
+        card.style = "width: 641px"
+        card.style = "heigth: 400px"
+        card.style = "margin-right: 10%"
 
         // Crea l'iframe
-        var iframe = document.createElement('iframe');
-        iframe.src = 'http://192.168.100.204:8000/bgr';
-        iframe.allow = 'autoplay';
-        iframe.width = 1920
-        iframe.height = 1080
+        var iframeTop = document.createElement('iframe');
+        iframeTop.src = 'http://192.168.100.204:8000/bgr';
+        iframeTop.allow = 'autoplay';
+        iframeTop.width = 1920
+        iframeTop.height = 1080
+        iframeTop.classList.add('card-img-top')
 
-        var cardIframeContainer = document.createElement('div');
-        cardIframeContainer.classList.add('iframeContainer');
-        // Aggiungi l'iframe alla card
-        cardIframeContainer.appendChild(iframe);
-        card.appendChild(cardIframeContainer);
+        card.appendChild(iframeTop);
 
         // Crea il corpo della card
         var cardBody = document.createElement('div');
@@ -48,7 +44,8 @@ for (let i = 1; i < 3; i++) {
 
         // Crea il pulsante della card
         var cardButton = document.createElement('a');
-        cardButton.className = 'card-btn';
+        cardButton.classList.add('btn');
+        cardButton.classList.add('btn-primary');
         cardButton.href = '#';
         cardButton.textContent = 'Go somewhere';
 
@@ -59,6 +56,8 @@ for (let i = 1; i < 3; i++) {
 
         // Aggiungi il corpo della card alla card
         card.appendChild(cardBody);
+
+
 
         // Aggiungi la card al container
         document.querySelector('#card-container').append(card);
