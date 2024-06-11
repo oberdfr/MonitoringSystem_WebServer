@@ -371,12 +371,24 @@ td {
   margin: 10px auto;
 }
 
+.circle-bg {
+  stroke: #eee;
+  stroke-width: 1;
+}
+
 .circle {
   stroke: #4c81c7;
   fill: none;
   stroke-width: 2;
   stroke-linecap: round;
   animation: progress 1s ease-out forwards;
+}
+
+.percentage {
+  fill: #666;
+  font-family: sans-serif;
+  font-size: 0.5em;
+  text-anchor: middle;
 }
 
 @keyframes progress {

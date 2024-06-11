@@ -152,21 +152,22 @@ function logout() {
 
 // percentage meters
 document.addEventListener('DOMContentLoaded', function () {
-    function setProgress(percentage) {
-        const circle = document.querySelector('.circular-chart .circle');
-        const text = document.querySelector('.circular-chart .percentage');
-
-        const radius = circle.r.baseVal.value;
+    function fillCircle(type, percentage) {
+        const circle = document.getElementById(`circle${type.charAt(0).toUpperCase() + type.slice(1)}`);
+        const text = circle.nextElementSibling;
+        const radius = 12.9155;
         const circumference = 2 * Math.PI * radius;
-
         const offset = circumference - (percentage / 100) * circumference;
 
         circle.style.strokeDasharray = `${circumference} ${circumference}`;
-        circle.style.strokeDashoffset = offset;
-        text.textContent = `${percentage}%`;
+        circle.style.strokeDashoffset = `${circumference}`;
+
+        setTimeout(() => {
+            circle.style.strokeDashoffset = `${offset}`;
+            text.textContent = `${percentage}%`;
+        }, 10);
     }
 
-    // Example usage:
-    const percentage = 65; // Replace this with the value you get from JavaScript
-    setProgress(percentage);
+    fillCircle('carta', 70); // Change 70 to the desired percentage
+    fillCircle('plastica', 85); // Change 85 to the desired percentage
 });
