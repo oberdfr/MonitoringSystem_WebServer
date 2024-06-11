@@ -149,25 +149,26 @@ function logout() {
         .catch(error => console.log("Error logging out:", error));
 }
 
+function fillCircle(type, percentage) {
+    const circle = document.getElementById(`circle${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    const text = circle.nextElementSibling;
+    const radius = 12.9155;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (percentage / 100) * circumference;
+
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    circle.style.strokeDashoffset = `${circumference}`;
+
+    setTimeout(() => {
+        circle.style.strokeDashoffset = `${offset}`;
+        text.textContent = `${percentage}%`;
+    }, 10);
+}
+
 
 // percentage meters
 document.addEventListener('DOMContentLoaded', function () {
-    function fillCircle(type, percentage) {
-        const circle = document.getElementById(`circle${type.charAt(0).toUpperCase() + type.slice(1)}`);
-        const text = circle.nextElementSibling;
-        const radius = 12.9155;
-        const circumference = 2 * Math.PI * radius;
-        const offset = circumference - (percentage / 100) * circumference;
-
-        circle.style.strokeDasharray = `${circumference} ${circumference}`;
-        circle.style.strokeDashoffset = `${circumference}`;
-
-        setTimeout(() => {
-            circle.style.strokeDashoffset = `${offset}`;
-            text.textContent = `${percentage}%`;
-        }, 10);
-    }
-
+    
     fillCircle('carta', 70); // Change 70 to the desired percentage
     fillCircle('plastica', 85); // Change 85 to the desired percentage
 });

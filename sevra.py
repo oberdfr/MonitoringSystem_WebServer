@@ -81,7 +81,10 @@ def getBin():
     misPlastica = request.args.get("misplastica")
     print("carta: " + str(misCarta))
     print("plastica: " + str(misPlastica))
+    
+
     return jsonify(status="bin mis sent")
+
 
 
 if __name__ == '__main__':
