@@ -98,7 +98,7 @@ def write_data(data, fileToWrite):
     with open(fileToWrite, 'w') as file:
         json.dump(data, file)
 
-def convertBinData(mis):
+def convertBinData(distanza):
     if distanza <= 16:
         return 100
     elif distanza >= 200:
@@ -118,18 +118,20 @@ def getBin():
     if (misCarta - temp_data["carta"][9]) <= -10:
         perm_data = read_data(PERM_BIN_DATA)
         emptyDiffCarta = abs(misCarta - temp_data["carta"][9])
-        if perm_data["carta"][0]:
-            perm_data["carta"][0] = (perm_data["carta"][0] + emptyDiffCarta)
-        else:
+        try:
+            if perm_data["carta"][0]:
+                perm_data["carta"][0] = (perm_data["carta"][0] + emptyDiffCarta)
+        except (KeyError, IndexError):
             perm_data["carta"].append(emptyDiffCarta)
         write_data(perm_data, PERM_BIN_DATA)
 
     if (misPlastica - temp_data["plastica"][9]) <= -10:
         perm_data = read_data(PERM_BIN_DATA)
         emptyDiffPlastica = abs(misPlastica - temp_data["plastica"][9])
-        if perm_data["plastica"][0]:
-            perm_data["plastica"][0] = (perm_data["plastica"][0] + emptyDiffPlastica)
-        else:
+        try:
+            if perm_data["plastica"][0]:
+                perm_data["plastica"][0] = (perm_data["plastica"][0] + emptyDiffPlastica)
+        except (KeyError, IndexError):
             perm_data["plastica"].append(emptyDiffPlastica)
         write_data(perm_data, PERM_BIN_DATA)
     
