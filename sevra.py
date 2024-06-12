@@ -20,9 +20,20 @@ Session(app)
 USERNAME = "admin"
 PASSWORD = "admin"
 
+# define bin vars
+BIDONE_CARTA = 1
+CARTA_HEIGHT = 70
+BIDONE_PLASTICA = 2
+PLASTICA_HEIGHT = 80
+
 # Define the path to the file that will store the data
 TMP_BIN_DATA = 'tmp_bin_data.json'
 PERM_BIN_DATA = 'perm_bin_data.json'
+TMP_AIR_DATA = 'tmp_air_data.json'
+PERM_AIR_DATA = 'perm_air_data.json'
+# data types
+AIR_TYPE = {"MQ2": [], "MQ7": []}
+BIN_TYPE = {"carta": [], "plastica": []}
 
 @app.route("/login")
 def index():
@@ -82,15 +93,15 @@ def getP():
     return jsonify(status="people sent")
 
 # Function to read data from the file
-def read_data(fileToRead):
+def read_data(fileToRead, type):
     if os.path.exists(fileToRead):
         try:
             with open(fileToRead, 'r') as file:
                 data = json.load(file)
         except (json.JSONDecodeError, IOError):
-            data = {"carta": [], "plastica": []}
+            data = type
     else:
-        data = {"carta": [], "plastica": []}
+        data = type
     return data
 
 # Function to write data to the file
@@ -98,26 +109,41 @@ def write_data(data, fileToWrite):
     with open(fileToWrite, 'w') as file:
         json.dump(data, file)
 
-def convertBinData(distanza):
-    if distanza <= 16:
+
+def convertBinData(distanza, bin):
+    if (bin == BIDONE_CARTA):
+        offsetvalue = 6
+        bin_height = CARTA_HEIGHT
+    elif(bin == BIDONE_PLASTICA):
+        offsetvalue = 12
+        bin_height = PLASTICA_HEIGHT
+
+    if distanza <= offsetvalue:
         return 100
     elif distanza >= 200:
         return 0
     else:
-        percentuale = 100 - ((distanza - 16) / (200 - 16)) * 100
-        return int(round(percentuale / 5) * 5)
+        percentuale = 100 - (((distanza - offsetvalue) / bin_height) * 100)
+        print(percentuale)
+        print(bin)
+        return int(round(percentuale / 10) * 10)
+
     
 @app.route('/sendbin')
 def getBin():
-    misCarta = convertBinData(int(request.args.get("miscarta", 0)))
-    misPlastica = convertBinData(int(request.args.get("misplastica", 0)))
+    misCarta = int(request.args.get("miscarta", 0))
+    misPlastica = int(request.args.get("misplastica", 0))
+    print("carta percentuali prima di round:")
+    percentCarta = convertBinData(misCarta, BIDONE_CARTA)
+    print("plastica percentuali prima di round:")
+    percentPlastica = convertBinData(misPlastica, BIDONE_PLASTICA)
 
-    temp_data = read_data(TMP_BIN_DATA)
+    temp_data = read_data(TMP_BIN_DATA, BIN_TYPE)
     
     # calc bin diff if emptied
-    if (misCarta - temp_data["carta"][9]) <= -10:
-        perm_data = read_data(PERM_BIN_DATA)
-        emptyDiffCarta = abs(misCarta - temp_data["carta"][9])
+    if (percentCarta - temp_data["carta"][9]) <= -10:
+        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+        emptyDiffCarta = abs(percentCarta - temp_data["carta"][9])
         try:
             if perm_data["carta"][0]:
                 perm_data["carta"][0] = (perm_data["carta"][0] + emptyDiffCarta)
@@ -125,9 +151,9 @@ def getBin():
             perm_data["carta"].append(emptyDiffCarta)
         write_data(perm_data, PERM_BIN_DATA)
 
-    if (misPlastica - temp_data["plastica"][9]) <= -10:
-        perm_data = read_data(PERM_BIN_DATA)
-        emptyDiffPlastica = abs(misPlastica - temp_data["plastica"][9])
+    if (percentPlastica - temp_data["plastica"][9]) <= -10:
+        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+        emptyDiffPlastica = abs(percentPlastica - temp_data["plastica"][9])
         try:
             if perm_data["plastica"][0]:
                 perm_data["plastica"][0] = (perm_data["plastica"][0] + emptyDiffPlastica)
@@ -136,25 +162,28 @@ def getBin():
         write_data(perm_data, PERM_BIN_DATA)
     
     # Update the carta values
-    temp_data["carta"].append(misCarta)
+    temp_data["carta"].append(percentCarta)
     if len(temp_data["carta"]) > 10:
         temp_data["carta"].pop(0)
     
     # Update the plastica values
-    temp_data["plastica"].append(misPlastica)
+    temp_data["plastica"].append(percentPlastica)
     if len(temp_data["plastica"]) > 10:
         temp_data["plastica"].pop(0)
 
     write_data(temp_data, TMP_BIN_DATA)
     
-    print("carta: " + str(misCarta))
-    print("plastica: " + str(misPlastica))
+    # debug
+    print("distanza carta: " + str(misCarta))
+    print("distanza plastica: " + str(misPlastica))
+    print("percentuale carta: " + str(percentCarta))
+    print("percentuale plastica: " + str(percentPlastica))
     
     return jsonify(status="bin mis sent")
 
 @app.route('/latestbins')
 def latest_bins():
-    data = read_data(TMP_BIN_DATA)
+    data = read_data(TMP_BIN_DATA, BIN_TYPE)
     latest_data = {
         "carta": data["carta"][-1] if data["carta"] else 0,
         "plastica": data["plastica"][-1] if data["plastica"] else 0
