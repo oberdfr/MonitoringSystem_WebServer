@@ -97,10 +97,19 @@ def write_data(data):
     with open(DATA_FILE, 'w') as file:
         json.dump(data, file)
 
+def convertBinData(mis):
+    if distanza <= 16:
+        return 100
+    elif distanza >= 200:
+        return 0
+    else:
+        percentuale = 100 - ((distanza - 16) / (200 - 16)) * 100
+        return int(round(percentuale / 5) * 5)
+    
 @app.route('/sendbin')
 def getBin():
-    misCarta = int(request.args.get("miscarta", 0))
-    misPlastica = int(request.args.get("misplastica", 0))
+    misCarta = convertBinData(int(request.args.get("miscarta", 0)))
+    misPlastica = convertBinData(int(request.args.get("misplastica", 0)))
 
     data = read_data()
     
