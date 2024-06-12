@@ -22,6 +22,7 @@ PASSWORD = "admin"
 
 # Define the path to the file that will store the data
 TMP_BIN_DATA = 'tmp_bin_data.json'
+PERM_BIN_DATA = 'perm_bin_data.json'
 
 @app.route("/login")
 def index():
@@ -81,10 +82,10 @@ def getP():
     return jsonify(status="people sent")
 
 # Function to read data from the file
-def read_data():
-    if os.path.exists(TMP_BIN_DATA):
+def read_data(fileToRead):
+    if os.path.exists(fileToRead):
         try:
-            with open(TMP_BIN_DATA, 'r') as file:
+            with open(fileToRead, 'r') as file:
                 data = json.load(file)
         except (json.JSONDecodeError, IOError):
             data = {"carta": [], "plastica": []}
@@ -93,8 +94,8 @@ def read_data():
     return data
 
 # Function to write data to the file
-def write_data(data):
-    with open(TMP_BIN_DATA, 'w') as file:
+def write_data(data, fileToWrite):
+    with open(fileToWrite, 'w') as file:
         json.dump(data, file)
 
 def convertBinData(mis):
@@ -111,19 +112,38 @@ def getBin():
     misCarta = convertBinData(int(request.args.get("miscarta", 0)))
     misPlastica = convertBinData(int(request.args.get("misplastica", 0)))
 
-    data = read_data()
+    temp_data = read_data(TMP_BIN_DATA)
+    
+    # calc bin diff if emptied
+    if (misCarta - temp_data["carta"][9]) <= -10:
+        perm_data = read_data(PERM_BIN_DATA)
+        emptyDiffCarta = abs(misCarta - temp_data["carta"][9])
+        if perm_data["carta"][0]:
+            perm_data["carta"][0] = (perm_data["carta"][0] + emptyDiffCarta)
+        else:
+            perm_data["carta"].append(emptyDiffCarta)
+        write_data(perm_data, PERM_BIN_DATA)
+
+    if (misPlastica - temp_data["plastica"][9]) <= -10:
+        perm_data = read_data(PERM_BIN_DATA)
+        emptyDiffPlastica = abs(misPlastica - temp_data["plastica"][9])
+        if perm_data["plastica"][0]:
+            perm_data["plastica"][0] = (perm_data["plastica"][0] + emptyDiffPlastica)
+        else:
+            perm_data["plastica"].append(emptyDiffPlastica)
+        write_data(perm_data, PERM_BIN_DATA)
     
     # Update the carta values
-    data["carta"].append(misCarta)
-    if len(data["carta"]) > 10:
-        data["carta"].pop(0)
+    temp_data["carta"].append(misCarta)
+    if len(temp_data["carta"]) > 10:
+        temp_data["carta"].pop(0)
     
     # Update the plastica values
-    data["plastica"].append(misPlastica)
-    if len(data["plastica"]) > 10:
-        data["plastica"].pop(0)
+    temp_data["plastica"].append(misPlastica)
+    if len(temp_data["plastica"]) > 10:
+        temp_data["plastica"].pop(0)
 
-    write_data(data)
+    write_data(temp_data, TMP_BIN_DATA)
     
     print("carta: " + str(misCarta))
     print("plastica: " + str(misPlastica))
@@ -132,7 +152,7 @@ def getBin():
 
 @app.route('/latestbins')
 def latest_bins():
-    data = read_data()
+    data = read_data(TMP_BIN_DATA)
     latest_data = {
         "carta": data["carta"][-1] if data["carta"] else 0,
         "plastica": data["plastica"][-1] if data["plastica"] else 0
