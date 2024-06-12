@@ -21,7 +21,7 @@ USERNAME = "admin"
 PASSWORD = "admin"
 
 # Define the path to the file that will store the data
-DATA_FILE = 'bin_data.json'
+TMP_BIN_DATA = 'tmp_bin_data.json'
 
 @app.route("/login")
 def index():
@@ -82,9 +82,9 @@ def getP():
 
 # Function to read data from the file
 def read_data():
-    if os.path.exists(DATA_FILE):
+    if os.path.exists(TMP_BIN_DATA):
         try:
-            with open(DATA_FILE, 'r') as file:
+            with open(TMP_BIN_DATA, 'r') as file:
                 data = json.load(file)
         except (json.JSONDecodeError, IOError):
             data = {"carta": [], "plastica": []}
@@ -94,7 +94,7 @@ def read_data():
 
 # Function to write data to the file
 def write_data(data):
-    with open(DATA_FILE, 'w') as file:
+    with open(TMP_BIN_DATA, 'w') as file:
         json.dump(data, file)
 
 def convertBinData(mis):
