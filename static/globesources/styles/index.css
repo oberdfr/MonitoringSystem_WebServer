@@ -46,10 +46,6 @@ canvas {
 }
 
 #globe-container {
-	width: 480px;
-	/* Set your desired width */
-	height: 270px;
-	/* Set your desired height */
 	position: relative;
 	border: 1px solid black;
 	/* Optional: for visual debugging */

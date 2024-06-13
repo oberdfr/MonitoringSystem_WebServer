@@ -320,14 +320,14 @@
 .result_air {
   background-color: #caf0f8;
   border-radius: 15px;
-  margin: 2.5%;
+  margin: min(20px, 5%);
   transition: transform .2s;
 }
 
 .result_black {
   background-color: #000000;
   border-radius: 15px;
-  margin: 2.5%;
+  margin: clamp(20px, 2.5%, 40px);
   transition: transform .2s;
   align-items: center;
   justify-content: center;
