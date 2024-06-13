@@ -3,21 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var ctx = document.getElementById("myChart").getContext("2d");
 
-
-    function getRandomData(numPoints) {
-        var data = [];
-        for (var i = 0; i < numPoints; i++) {
-
-            let num = Math.floor(Math.random() * 1000)
-            if (num != 0) {
-                data.push(num);
-            }
-
-        }
-        return data;
-    }
-
-
+    // Initialize chart with empty data
     var data = {
         labels: ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"],
         datasets: [{
@@ -25,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
             backgroundColor: "rgba(0, 119, 182, 0.1)",
             borderColor: "rgba(0, 119, 182, 1)",
             borderWidth: 1,
-            data: getRandomData(7)
+            data: [0, 0, 0, 0, 0, 0, 0] // initial empty data
         }]
     };
 
@@ -44,6 +30,20 @@ document.addEventListener("DOMContentLoaded", function () {
         data: data,
         options: options
     });
+
+    function updateWeeklyBinData() {
+        fetch('/weekbins')
+            .then(response => response.json())
+            .then(data => {
+                myNewChart.data.datasets[0].data = data.carta + data.plastica;
+                myNewChart.update();
+            })
+            .catch(error => console.error('Error fetching weekly bin data:', error));
+    }
+
+    // Fetch weekly data on load and update the chart
+    updateWeeklyBinData();
+    setInterval(updateWeeklyBinData, 5000); // Update every 5 seconds
 });
 
 document.addEventListener("DOMContentLoaded", function () {
