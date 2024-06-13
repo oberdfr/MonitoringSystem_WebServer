@@ -92,6 +92,21 @@ def getP():
     print(p)
     return jsonify(status="people sent")
 
+@app.route('/sendqoa')
+def getQoa():
+    val = request.args.get("qa")
+    val2 = request.args.get("co2")
+    print("qualita: ")
+    print(val)
+    print("co2")
+    print(val2)
+    data = read_data(PERM_AIR_DATA, AIR_TYPE)
+    data["MQ7"].append(val2)
+    data["MQ2"].append(val)
+    write_data(data, PERM_AIR_DATA)
+    return jsonify(status="people sent")
+
+
 # Function to read data from the file
 def read_data(fileToRead, type):
     if os.path.exists(fileToRead):
