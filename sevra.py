@@ -207,5 +207,25 @@ def latest_bins():
     response.headers['Cache-Control'] = 'no-store'
     return response
 
+@app.route('/latestco2')
+def latest_co2():
+    data = read_data(PERM_AIR_DATA, AIR_TYPE)
+    latest_data = {
+        "MQ7": data["MQ7"][len(data["MQ7"]) - 1]
+    }
+    response = jsonify(latest_data)
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+@app.route('/latestairquality')
+def latest_airquality():
+    data = read_data(PERM_AIR_DATA, AIR_TYPE)
+    latest_data = {
+        "MQ2": data["MQ2"][len(data["MQ2"]) - 1]
+    }
+    response = jsonify(latest_data)
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
