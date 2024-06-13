@@ -4,6 +4,8 @@ from flask_session import Session
 import json
 import os
 import datetime
+import time
+import schedule
 
 app = Flask(__name__)
 CORS(app)
@@ -36,6 +38,24 @@ PERM_AIR_DATA = 'perm_air_data.json'
 # data types
 AIR_TYPE = {"MQ2": [], "MQ7": []}
 BIN_TYPE = {"carta": [], "plastica": []}
+
+def reset_weekly_measurements():
+    blank_data = {
+        "carta": [0, 0, 0, 0, 0, 0, 0, 0],
+        "plastica": [0, 0, 0, 0, 0, 0, 0, 0]
+    }
+    with open(PERM_BIN_DATA_WEEK, 'w') as file:
+        json.dump(blank_data, file)
+    print("Weekly measurements reset at:", datetime.now())
+
+# Schedule the reset task at midnight on Mondays
+schedule.every().monday.at("00:00").do(reset_weekly_measurements)
+
+# Function to keep the scheduler running
+def run_scheduler():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 @app.route("/login")
 def index():
@@ -286,3 +306,4 @@ def latest_airquality():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+    run_scheduler()
