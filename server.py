@@ -155,31 +155,6 @@ def getBin():
 
     temp_data = read_data(TMP_BIN_DATA, BIN_TYPE)
     
-    # calc paper bin diff if emptied
-    try:
-        emptyDiffCarta = abs(temp_data["carta"][len(temp_data["carta"]) - 1])
-        if (emptyDiffCarta <= -10):
-            perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
-            if perm_data["carta"][0]:
-                perm_data["carta"][0] = (perm_data["carta"][0] + emptyDiffCarta)
-                write_data(perm_data, PERM_BIN_DATA)
-    except (KeyError, IndexError):
-        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
-        perm_data["carta"].append(emptyDiffCarta)
-        write_data(perm_data, PERM_BIN_DATA)
-
-    # calc plastic bin diff if emptied
-    try:
-        emptyDiffPlastica = abs(temp_data["plastica"][len(temp_data["plastica"]) - 1])
-        if (emptyDiffPlastica <= -10):
-            perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
-            if perm_data["plastica"][0]:
-                perm_data["plastica"][0] = (perm_data["plastica"][0] + emptyDiffPlastica)
-            write_data(perm_data, PERM_BIN_DATA)
-    except (KeyError, IndexError):
-        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
-        perm_data["plastica"].append(emptyDiffPlastica)
-        write_data(perm_data, PERM_BIN_DATA)
     
     # Update the carta values
     temp_data["carta"].append(percentCarta)
@@ -192,6 +167,36 @@ def getBin():
         temp_data["plastica"].pop(0)
 
     write_data(temp_data, TMP_BIN_DATA)
+
+        # calc paper bin diff if emptied
+    try:
+        emptyDiffCarta = abs(percentCarta - temp_data["carta"][len(temp_data["carta"]) - 2])
+        print("differenza carta:")
+        print(emptyDiffCarta)
+        if (emptyDiffCarta >= 10):
+            perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+            if perm_data["carta"][0]:
+                perm_data["carta"][0] = (perm_data["carta"][0] + emptyDiffCarta)
+                write_data(perm_data, PERM_BIN_DATA)
+    except (KeyError, IndexError):
+        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+        perm_data["carta"].append(emptyDiffCarta)
+        write_data(perm_data, PERM_BIN_DATA)
+
+    # calc plastic bin diff if emptied
+    try:
+        emptyDiffPlastica = abs(percentPlastica - (temp_data["plastica"][len(temp_data["plastica"]) - 2]))
+        print("differenza plastica:")
+        print(emptyDiffPlastica)
+        if (emptyDiffPlastica >= 10):
+            perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+            if perm_data["plastica"][0]:
+                perm_data["plastica"][0] = (perm_data["plastica"][0] + emptyDiffPlastica)
+            write_data(perm_data, PERM_BIN_DATA)
+    except (KeyError, IndexError):
+        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+        perm_data["plastica"].append(emptyDiffPlastica)
+        write_data(perm_data, PERM_BIN_DATA)
     
     # debug
     print("distanza carta: " + str(misCarta))
