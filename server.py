@@ -247,7 +247,7 @@ def getBin():
     # --- WEEK DATA ---
     perm_weekdata = read_data(PERM_BIN_DATA_WEEK, BIN_TYPE)
 
-    if not ((os.path.exists(PERM_BIN_DATA_WEEK)) and (is_json_file_empty(PERM_BIN_DATA_WEEK) == False)):
+    if not ((os.path.exists(PERM_BIN_DATA_WEEK)) or (is_json_file_empty(PERM_BIN_DATA_WEEK) == False)):
         for i in range(7):
             perm_weekdata = read_data(BLANK_FILE, BIN_TYPE)
             perm_weekdata["carta"].append(0)
