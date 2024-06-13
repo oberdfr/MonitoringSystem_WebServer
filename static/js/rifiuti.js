@@ -184,5 +184,5 @@ function updateBinData() {
 
 document.addEventListener('DOMContentLoaded', function () {
     updateBinData();
-    setInterval(updateBinData, 1 * 1000); // Update every 5 minutes
+    setInterval(updateBinData, 1 * 5000); // Update every 5 seconds
 });
