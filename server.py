@@ -40,13 +40,17 @@ AIR_TYPE = {"MQ2": [], "MQ7": []}
 BIN_TYPE = {"carta": [], "plastica": []}
 
 def reset_weekly_measurements():
-    blank_data = {
-        "carta": [0, 0, 0, 0, 0, 0, 0, 0],
-        "plastica": [0, 0, 0, 0, 0, 0, 0, 0]
-    }
-    with open(PERM_BIN_DATA_WEEK, 'w') as file:
-        json.dump(blank_data, file)
-    print("Weekly measurements reset at:", datetime.now())
+    if os.path.exists(PERM_BIN_DATA_WEEK):
+        blank_data = {
+            "carta": [0, 0, 0, 0, 0, 0, 0, 0],
+            "plastica": [0, 0, 0, 0, 0, 0, 0, 0]
+        }
+        with open(PERM_BIN_DATA_WEEK, 'w') as file:
+            json.dump(blank_data, file)
+        print("Weekly measurements reset at:", datetime.now())
+    else:
+        template = read_data(BLANK_FILE, BIN_TYPE)
+        write_data(template, PERM_BIN_DATA_WEEK)
 
 # Schedule the reset task at midnight on Mondays
 schedule.every().monday.at("00:00").do(reset_weekly_measurements)
