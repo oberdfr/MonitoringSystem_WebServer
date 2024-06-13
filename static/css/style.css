@@ -324,6 +324,17 @@
   transition: transform .2s;
 }
 
+.result_black {
+  background-color: #000000;
+  border-radius: 15px;
+  margin: 2.5%;
+  transition: transform .2s;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  /* Centers vertically */
+}
+
 .result_air:hover {
   transform: scale(1.02);
 

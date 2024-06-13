@@ -12,6 +12,8 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="static/globesources/styles/index.css">
 </head>
 
 <body>
@@ -69,14 +71,49 @@
   </div>
   <section class="home-section">
     <div class="text" align="center">Dashboard</div>
-    <div id="result_air">
 
+    <div class="result_black" style="height: 515px; width: 615px;">
+      <div class="globeContainer" id="globe-container" style="height: 500px; width: 600px;"></div>
     </div>
 
   </section>
-  <script src="static/js/dashboard.js">
+  <script src="static/js/dashboard.js"></script>
 
-  </script>
+  <script src="static/globesources/websource/three.min.js"></script>
+  <script src="static/globesources/websource/Stats.min.js"></script>
+  <script src="static/globesources/websource/dat.gui.min.js"></script>
+  <script src="static/globesources/websource/Tween.min.js"></script>
+  <script src="static/globesources/websource/fabric.min.js"></script>
+  <script src="static/globesources/websource/chroma.min.js"></script>
+  <script src="static/globesources/libs/THREE.MeshLine.js"></script>
+  <script src="static/globesources/websource/d3-array.v1.min.js"></script>
+  <script src="static/globesources/websource/d3-geo.v1.min.js"></script>
+
+  <script src="static/globesources/libs/orbit-controls.js"></script>
+  <script src="static/globesources/libs/trackball-controls.js"></script>
+  <script src="static/globesources/libs/perlin-noise.js"></script>
+
+  <script src="static/globesources/assets/data/processing.js"></script>
+
+  <script src="static/globesources/scripts/config.js"></script>
+  <script src="static/globesources/scripts/app.js"></script>
+  <script src="static/globesources/scripts/shaders.js"></script>
+  <script src="static/globesources/scripts/index.js"></script>
+
+  <script src="static/globesources/assets/data/countries.js"></script>
+  <script src="static/globesources/assets/data/connections.js"></script>
+  <script src="static/globesources/assets/data/grid.js"></script>
+
+
+  <script src="static/globesources/scripts/globe.js"></script>
+  <script src="static/globesources/scripts/points.js"></script>
+  <script src="static/globesources/scripts/marker.js"></script>
+  <script src="static/globesources/scripts/markers.js"></script>
+  <script src="static/globesources/scripts/lines.js"></script>
+  <script src="static/globesources/scripts/dots.js"></script>
+  <script src="static/globesources/scripts/camera.js"></script>
+
+  <script src="static/globesources/scripts/utils.js"></script>
 </body>
 
 </html>
