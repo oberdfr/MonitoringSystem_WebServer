@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_session import Session
 import json
 import os
-
+import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -27,8 +27,10 @@ BIDONE_PLASTICA = 2
 PLASTICA_HEIGHT = 80
 
 # Define the path to the file that will store the data
+BLANK_FILE = 'blankfile'
 TMP_BIN_DATA = 'tmp_bin_data.json'
-PERM_BIN_DATA = 'perm_bin_data.json'
+PERM_BIN_DATA_TOTAL = 'perm_bin_data_total.json'
+PERM_BIN_DATA_WEEK = 'perm_bin_data_week.json'
 TMP_AIR_DATA = 'tmp_air_data.json'
 PERM_AIR_DATA = 'perm_air_data.json'
 # data types
@@ -143,6 +145,22 @@ def convertBinData(distanza, bin):
         print(bin)
         return int(round(percentuale / 10) * 10)
 
+def is_json_file_empty(file_path):
+    # Check if the file exists and has a size greater than 0
+    if os.path.isfile(file_path) and os.path.getsize(file_path) > 0:
+        with open(file_path, 'r') as file:
+            try:
+                data = json.load(file)
+                # Check if the data is an empty dictionary or an empty list
+                if data == {} or data == []:
+                    return True
+                else:
+                    return False
+            except json.JSONDecodeError:
+                # If there's an error decoding JSON, consider it as not empty
+                return False
+    else:
+        return True
     
 @app.route('/sendbin')
 def getBin():
@@ -154,7 +172,9 @@ def getBin():
     percentPlastica = convertBinData(misPlastica, BIDONE_PLASTICA)
 
     temp_data = read_data(TMP_BIN_DATA, BIN_TYPE)
-    
+
+    # Get the current date and time
+    now = datetime.datetime.now()
     
     # Update the carta values
     temp_data["carta"].append(percentCarta)
@@ -168,20 +188,21 @@ def getBin():
 
     write_data(temp_data, TMP_BIN_DATA)
 
-        # calc paper bin diff if emptied
+    # --- TOTAL DATA ---
+    # calc paper bin diff if emptied
     try:
         emptyDiffCarta = abs(percentCarta - temp_data["carta"][len(temp_data["carta"]) - 2])
         print("differenza carta:")
         print(emptyDiffCarta)
         if (emptyDiffCarta >= 10):
-            perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+            perm_data = read_data(PERM_BIN_DATA_TOTAL, BIN_TYPE)
             if perm_data["carta"][0]:
                 perm_data["carta"][0] = (perm_data["carta"][0] + emptyDiffCarta)
-                write_data(perm_data, PERM_BIN_DATA)
+                write_data(perm_data, PERM_BIN_DATA_TOTAL)
     except (KeyError, IndexError):
-        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+        perm_data = read_data(PERM_BIN_DATA_TOTAL, BIN_TYPE)
         perm_data["carta"].append(emptyDiffCarta)
-        write_data(perm_data, PERM_BIN_DATA)
+        write_data(perm_data, PERM_BIN_DATA_TOTAL)
 
     # calc plastic bin diff if emptied
     try:
@@ -189,15 +210,41 @@ def getBin():
         print("differenza plastica:")
         print(emptyDiffPlastica)
         if (emptyDiffPlastica >= 10):
-            perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+            perm_data = read_data(PERM_BIN_DATA_TOTAL, BIN_TYPE)
             if perm_data["plastica"][0]:
                 perm_data["plastica"][0] = (perm_data["plastica"][0] + emptyDiffPlastica)
-            write_data(perm_data, PERM_BIN_DATA)
+            write_data(perm_data, PERM_BIN_DATA_TOTAL)
     except (KeyError, IndexError):
-        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+        perm_data = read_data(PERM_BIN_DATA_TOTAL, BIN_TYPE)
         perm_data["plastica"].append(emptyDiffPlastica)
-        write_data(perm_data, PERM_BIN_DATA)
-    
+        write_data(perm_data, PERM_BIN_DATA_TOTAL)
+    # --- TOTAL DATA END ---
+
+    # --- WEEK DATA ---
+    perm_weekdata = read_data(PERM_BIN_DATA_WEEK, BIN_TYPE)
+
+    if not ((os.path.exists(PERM_BIN_DATA_WEEK)) and (is_json_file_empty(PERM_BIN_DATA_WEEK) == False)):
+        for i in range(8):
+            perm_weekdata = read_data(BLANK_FILE, BIN_TYPE)
+            perm_weekdata["carta"].append(0)
+            perm_weekdata["plastica"].append(0)
+            write_data(perm_weekdata, PERM_BIN_DATA_WEEK)
+
+
+    emptyDiffCarta = abs(percentCarta - temp_data["carta"][len(temp_data["carta"]) - 2])
+    emptyDiffPlastica = abs(percentPlastica - (temp_data["plastica"][len(temp_data["plastica"]) - 2]))
+    if (emptyDiffCarta >= 10):
+        perm_weekdata = read_data(PERM_BIN_DATA_WEEK, BIN_TYPE)
+        print(perm_weekdata)
+        print(now.weekday())
+        perm_weekdata["carta"][now.weekday()] = (perm_weekdata["carta"][now.weekday()] + emptyDiffCarta)
+        write_data(perm_weekdata, PERM_BIN_DATA_WEEK)
+    if (emptyDiffPlastica >= 10):
+        perm_weekdata = read_data(PERM_BIN_DATA_WEEK, BIN_TYPE)
+        perm_weekdata["plastica"][now.weekday()] = (perm_weekdata["plastica"][now.weekday()] + emptyDiffPlastica)
+        write_data(perm_weekdata, PERM_BIN_DATA_WEEK)
+    # --- WEEK DATA END ---
+
     # debug
     print("distanza carta: " + str(misCarta))
     print("distanza plastica: " + str(misPlastica))
