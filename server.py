@@ -155,25 +155,30 @@ def getBin():
 
     temp_data = read_data(TMP_BIN_DATA, BIN_TYPE)
     
-    # calc bin diff if emptied
-    if (percentCarta - temp_data["carta"][9]) <= -10:
-        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
-        emptyDiffCarta = abs(percentCarta - temp_data["carta"][9])
-        try:
+    # calc paper bin diff if emptied
+    try:
+        emptyDiffCarta = abs(temp_data["carta"][len(temp_data["carta"]) - 1])
+        if (emptyDiffCarta <= -10):
+            perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
             if perm_data["carta"][0]:
                 perm_data["carta"][0] = (perm_data["carta"][0] + emptyDiffCarta)
-        except (KeyError, IndexError):
-            perm_data["carta"].append(emptyDiffCarta)
+                write_data(perm_data, PERM_BIN_DATA)
+    except (KeyError, IndexError):
+        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+        perm_data["carta"].append(emptyDiffCarta)
         write_data(perm_data, PERM_BIN_DATA)
 
-    if (percentPlastica - temp_data["plastica"][9]) <= -10:
-        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
-        emptyDiffPlastica = abs(percentPlastica - temp_data["plastica"][9])
-        try:
+    # calc plastic bin diff if emptied
+    try:
+        emptyDiffPlastica = abs(temp_data["plastica"][len(temp_data["plastica"]) - 1])
+        if (emptyDiffPlastica <= -10):
+            perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
             if perm_data["plastica"][0]:
                 perm_data["plastica"][0] = (perm_data["plastica"][0] + emptyDiffPlastica)
-        except (KeyError, IndexError):
-            perm_data["plastica"].append(emptyDiffPlastica)
+            write_data(perm_data, PERM_BIN_DATA)
+    except (KeyError, IndexError):
+        perm_data = read_data(PERM_BIN_DATA, BIN_TYPE)
+        perm_data["plastica"].append(emptyDiffPlastica)
         write_data(perm_data, PERM_BIN_DATA)
     
     # Update the carta values
@@ -201,7 +206,7 @@ def latest_bins():
     data = read_data(TMP_BIN_DATA, BIN_TYPE)
     latest_data = {
         "carta": data["carta"][-1] if data["carta"] else 0,
-        "plastica": data["plastica"][-1] if data["plastica"] else 0
+        "plastica": data["plastica"][-1] if data["plastica"] else 0,
     }
     response = jsonify(latest_data)
     response.headers['Cache-Control'] = 'no-store'
@@ -211,7 +216,7 @@ def latest_bins():
 def latest_co2():
     data = read_data(PERM_AIR_DATA, AIR_TYPE)
     latest_data = {
-        "MQ7": data["MQ7"][len(data["MQ7"]) - 1]
+        "MQ7": data["MQ7"][len(data["MQ7"]) - 1] if data["MQ7"] else 0,
     }
     response = jsonify(latest_data)
     response.headers['Cache-Control'] = 'no-store'
@@ -221,7 +226,7 @@ def latest_co2():
 def latest_airquality():
     data = read_data(PERM_AIR_DATA, AIR_TYPE)
     latest_data = {
-        "MQ2": data["MQ2"][len(data["MQ2"]) - 1]
+        "MQ2": data["MQ2"][len(data["MQ2"]) - 1] if data["MQ2"] else 0,
     }
     response = jsonify(latest_data)
     response.headers['Cache-Control'] = 'no-store'
