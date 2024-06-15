@@ -338,7 +338,9 @@
   border-radius: 15px;
   margin: min(20px, 5%);
   transition: transform .2s;
-  width: 90%;
+  width: 85%;
+  margin-left: 7.5%;
+  margin-right: 7.5%;
 }
 
 .result_black {
