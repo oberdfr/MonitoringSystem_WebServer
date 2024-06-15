@@ -69,8 +69,19 @@
 
     </ul>
   </div>
-  <section class="home-section">
-    <div class="text" align="center">Dashboard</div>
+  <section id="dashHomeSection" class="home-section">
+    <div style="height: 25px; width: 100%;"></div>
+    <div class="result_black_chip text-center"
+      style="height: 100px; width: 400px; margin-left: auto; margin-right: auto; margin-bottom: 30px;">
+      <div class="col">
+        <img class="bx icon" style="margin-left: 10px;" src="static/img/Intuita_logo_white.webp"
+          alt="Intuita_logo_white" height="60" width="150">
+      </div>
+      <div class="col">
+        <h4 style="margin-top: 30px; margin-right: 15px; font-weight: bold; color: white; width: 200px;">Control Center
+        </h4>
+      </div>
+    </div>
 
     <div id="firstRowDashboard" class="row align-items-center text-center"
       style="margin-left: 2.5%; margin-right: 2.5%;">
@@ -80,8 +91,7 @@
         <div class="globeContainer" id="globe-container" style="height: 480px; width: 580px;"></div>
       </div>
 
-      <div id="paperChartResult" class="result_air col"
-        style="margin-top: 0px; margin-bottom: 0px; margin-right: 0px; height: 500px;">
+      <div id="paperChartResult" class="result_air col" style="margin-top: 0px; margin-bottom: 0px; height: 500px;">
         <div>Bidone Carta
           <svg id="cartaChart" class="circular-chart" style="height: 500px; width: 100%;" viewBox="0 0 36 36">
             <path class="circle-bg" d="M18 2.0845
@@ -113,7 +123,11 @@
 
     <div id="secondRowDashboard" class="row align-items-center text-center"
       style="margin-left: 2.5%; margin-right: 2.5%; margin-top: 30px;">
+    </div>
 
+    <div id="mobileBinsContainer" class="align-items-center text-center" style="margin-left: 2.5%; margin-right: 2.5%;">
+      <div id="paperContainerMobile" style="width: 100%;"></div>
+      <div id="plasticContainerMobile" style="width: 100%; margin-top: 30px;"></div>
     </div>
 
   </section>

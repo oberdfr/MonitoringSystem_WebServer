@@ -8,6 +8,10 @@
   font-family: "Poppins", sans-serif;
 }
 
+body {
+  min-width: 720px;
+}
+
 .sidebar {
   position: fixed;
   left: 0;
@@ -352,6 +356,16 @@
   justify-content: center;
   display: flex;
 }
+
+.result_black_chip {
+  background-color: #000000;
+  border-radius: 15px;
+  transition: transform .2s;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
 
 .result_air:hover {
   transform: scale(1.02);

@@ -3,17 +3,27 @@ let sidebar = document.querySelector(".sidebar");
 let closeBtn = document.querySelector("#btn");
 let searchBtn = document.querySelector(".bx-search");
 let logoutBtn = document.querySelector("#logout-button");
+let homeSection = document.querySelector("#dashHomeSection");
 let firstRowDashboard = document.querySelector("#firstRowDashboard");
 let secondRowDashboard = document.querySelector("#secondRowDashboard");
-let paperChartResult = document.querySelector("#paperChartResult");
-let plasticChartResult = document.querySelector("#plasticChartResult");
+let paperChartResult = document.getElementById("paperChartResult");
+let plasticChartResult = document.getElementById("plasticChartResult");
+let paperContainerMobile = document.getElementById("paperContainerMobile");
+let plasticContainerMobile = document.getElementById("plasticContainerMobile");
+let mobileBinsContainer = document.querySelector("#mobileBinsContainer");
+
+function isMobileDevice() {
+    console.log(/Mobi|Android|iPad|iPhone|iPod/.test(navigator.userAgent));
+    return /Mobi|Android|iPad|iPhone|iPod/.test(navigator.userAgent);
+}
+
+
+const DESKTOP_BIG = 1;
+const DESKTOP_LITTLE = 2;
+const MOBILE = 3;
 
 var windowWidth = window.innerWidth;
-if (windowWidth <= 1500) {
-    var mobileWiew = true;
-} else if (windowWidth > 1500) {
-    var mobileWiew = false;
-}
+var webWiew = 4;
 
 function updateWindowWidth() {
     firstRowDashboard = document.querySelector("#firstRowDashboard");
@@ -22,16 +32,31 @@ function updateWindowWidth() {
     plasticChartResult = document.querySelector("#plasticChartResult");
     windowWidth = window.innerWidth;
 
-    if (windowWidth <= 1550 && !mobileWiew) {
-        secondRowDashboard.appendChild(paperChartResult);
-        secondRowDashboard.appendChild(plasticChartResult);
-        mobileWiew = true;
+    if ((isMobileDevice() || windowWidth <= 1000) && webWiew != MOBILE) {
+        if (isMobileDevice()) {
+            firstRowDashboard.removeChild(globeResult);
+        }
+        paperContainerMobile.appendChild(paperChartResult);
+        plasticContainerMobile.appendChild(plasticChartResult);
+        webWiew = MOBILE;
     }
 
-    if (windowWidth > 1550 && mobileWiew) {
+    if (windowWidth <= 1550 && windowWidth > 1000 && webWiew != DESKTOP_LITTLE) {
+        if (!firstRowDashboard.contains(globeResult)) {
+            firstRowDashboard.appendChild(globeResult);
+        }
+        secondRowDashboard.appendChild(paperChartResult);
+        secondRowDashboard.appendChild(plasticChartResult);
+        webWiew = DESKTOP_LITTLE;
+    }
+
+    if (windowWidth > 1550 && webWiew != DESKTOP_BIG) {
+        if (!firstRowDashboard.contains(globeResult)) {
+            firstRowDashboard.appendChild(globeResult);
+        }
         firstRowDashboard.appendChild(paperChartResult);
         firstRowDashboard.appendChild(plasticChartResult);
-        mobileWiew = false;
+        webWiew = DESKTOP_BIG;
     }
 }
 
