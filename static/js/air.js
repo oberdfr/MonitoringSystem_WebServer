@@ -6,6 +6,46 @@ let primoPianoContainer = document.getElementById('primoPianoContainer')
 let seminterratoContainer = document.getElementById('seminterratoContainer')
 let airRow1 = document.getElementById('airRow1')
 let airRow2 = document.getElementById('airRow2')
+let sidebar = document.querySelector(".sidebar");
+let closeBtn = document.querySelector("#btn");
+let searchBtn = document.querySelector(".bx-search");
+let logoutBtn = document.querySelector("#logout-button");
+
+closeBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("open");
+  menuBtnChange();
+});
+
+searchBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("open");
+  menuBtnChange();
+});
+
+function menuBtnChange() {
+  if (sidebar.classList.contains("open")) {
+    closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+  } else {
+    closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+  }
+}
+
+function logout() {
+    fetch("http://192.168.68.63:5000/logout", { credentials: 'include' })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.status);
+        })
+        .catch(error => console.log("Error logging out:", error));
+}
+
+logoutBtn.addEventListener("click", () => {
+    console.log("Logout clicked");
+    logout();
+    setTimeout(function () {
+        window.location.reload()
+    }, 2500);
+
+});
 
 function isMobileDevice() {
     console.log(/Mobi|Android|iPad|iPhone|iPod/.test(navigator.userAgent));
@@ -44,15 +84,6 @@ function updateWindowWidth() {
 
 document.addEventListener('DOMContentLoaded', updateWindowWidth);
 window.addEventListener('resize', updateWindowWidth);
-
-function logout() {
-    fetch("http://192.168.68.63:5000/logout", { credentials: 'include' })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.status);
-        })
-        .catch(error => console.log("Error logging out:", error));
-}
 
 function updateCurrentCo2() {
     fetch('/latestco2')
