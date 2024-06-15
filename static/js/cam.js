@@ -1,5 +1,5 @@
 function logout() {
-    fetch("http://192.168.1.5:5000/logout", { credentials: 'include' })
+    fetch("http://192.168.68.63:5000/logout", { credentials: 'include' })
         .then(response => response.json())
         .then(data => {
             console.log(data.status);
@@ -20,13 +20,13 @@ for (let i = 1; i < 3; i++) {
 
         // Crea l'iframe
         var iframeTop = document.createElement('iframe');
-        if(i==1){
+        if (i == 1) {
             iframeTop.src = 'http://192.168.100.204:8000/bgr';
         }
-        if(i==2){
+        if (i == 2) {
             iframeTop.src = 'http://192.168.100.205:8000/bgr';
         }
-       
+
         iframeTop.allow = 'autoplay';
         iframeTop.width = 1920
         iframeTop.height = 1080

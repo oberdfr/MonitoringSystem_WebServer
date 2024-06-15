@@ -4,7 +4,7 @@ var qualita = document.getElementById('qualita')
 var piove = document.getElementById('piove')
 
 function logout() {
-    fetch("http://192.168.1.5:5000/logout", { credentials: 'include' })
+    fetch("http://192.168.68.63:5000/logout", { credentials: 'include' })
         .then(response => response.json())
         .then(data => {
             console.log(data.status);
