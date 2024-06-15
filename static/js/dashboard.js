@@ -17,6 +17,16 @@ function isMobileDevice() {
     return /Mobi|Android|iPad|iPhone|iPod/.test(navigator.userAgent);
 }
 
+let globeResult = document.createElement('div');
+globeResult.id = 'globeResult';
+globeResult.className = 'result_black col';
+globeResult.style.height = '500px';
+globeResult.style.width = 'calc(100% + 5px)';
+globeResult.style.marginTop = '0px';
+globeResult.style.marginBottom = '0px';
+globeResult.innerHTML = `
+            <div class="globeContainer" id="globe-container" style="height: 480px; width: 580px;"></div>
+        `;
 
 const DESKTOP_BIG = 1;
 const DESKTOP_LITTLE = 2;
@@ -33,8 +43,8 @@ function updateWindowWidth() {
     windowWidth = window.innerWidth;
 
     if ((isMobileDevice() || windowWidth <= 1000) && webWiew != MOBILE) {
-        if (isMobileDevice()) {
-            firstRowDashboard.removeChild(globeResult);
+        if (!isMobileDevice()) {
+            firstRowDashboard.appendChild(globeResult);
         }
         paperContainerMobile.appendChild(paperChartResult);
         plasticContainerMobile.appendChild(plasticChartResult);
@@ -45,6 +55,9 @@ function updateWindowWidth() {
         if (!firstRowDashboard.contains(globeResult)) {
             firstRowDashboard.appendChild(globeResult);
         }
+        if (!isMobileDevice()) {
+            firstRowDashboard.appendChild(globeResult);
+        }
         secondRowDashboard.appendChild(paperChartResult);
         secondRowDashboard.appendChild(plasticChartResult);
         webWiew = DESKTOP_LITTLE;
@@ -52,6 +65,9 @@ function updateWindowWidth() {
 
     if (windowWidth > 1550 && webWiew != DESKTOP_BIG) {
         if (!firstRowDashboard.contains(globeResult)) {
+            firstRowDashboard.appendChild(globeResult);
+        }
+        if (!isMobileDevice()) {
             firstRowDashboard.appendChild(globeResult);
         }
         firstRowDashboard.appendChild(paperChartResult);
