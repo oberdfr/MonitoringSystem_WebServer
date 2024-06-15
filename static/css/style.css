@@ -359,6 +359,11 @@
 
 }
 
+.result_black:hover {
+  transform: scale(1.02);
+
+}
+
 #tab_stat,
 tr,
 td {
