@@ -39,3 +39,11 @@ document.addEventListener('DOMContentLoaded', function () {
     setInterval(updateCurrentAirQuality, 1 * 1000); // Update every 5 minutes
     setInterval(updateCurrentCo2, 1 * 1000); // Update every 5 minutes
 });
+
+function setFullHeight() {
+    const section = document.getElementById('airHomeSection');
+    section.style.height = `${document.documentElement.scrollHeight}px`;
+}
+
+window.addEventListener('resize', setFullHeight);
+window.addEventListener('DOMContentLoaded', setFullHeight);

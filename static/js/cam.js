@@ -70,3 +70,11 @@ for (let i = 1; i < 3; i++) {
     });
 
 }
+
+function setFullHeight() {
+    const section = document.getElementById('camHomeSection');
+    section.style.height = `${document.documentElement.scrollHeight}px`;
+}
+
+window.addEventListener('resize', setFullHeight);
+window.addEventListener('DOMContentLoaded', setFullHeight);

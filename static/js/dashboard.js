@@ -98,3 +98,11 @@ function logout() {
         })
         .catch(error => console.log("Error logging out:", error));
 }
+
+function setFullHeight() {
+    const section = document.getElementById('dashHomeSection');
+    section.style.height = `${document.documentElement.scrollHeight}px`;
+}
+
+window.addEventListener('resize', setFullHeight);
+window.addEventListener('DOMContentLoaded', setFullHeight);

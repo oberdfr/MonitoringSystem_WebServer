@@ -357,8 +357,8 @@ body {
   display: flex;
 }
 
-.result_black_chip {
-  background-color: #000000;
+.result_header_chip {
+  background-color: #11101D;
   border-radius: 15px;
   transition: transform .2s;
   align-items: center;

@@ -186,3 +186,11 @@ document.addEventListener('DOMContentLoaded', function () {
     updateBinData();
     setInterval(updateBinData, 1 * 5000); // Update every 5 seconds
 });
+
+function setFullHeight() {
+    const section = document.getElementById('binsHomeSection');
+    section.style.height = `${document.documentElement.scrollHeight}px`;
+}
+
+window.addEventListener('resize', setFullHeight);
+window.addEventListener('DOMContentLoaded', setFullHeight);
