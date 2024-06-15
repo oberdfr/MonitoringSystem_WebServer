@@ -47,7 +47,6 @@ canvas {
 
 #globe-container {
 	position: relative;
-	border: 1px solid black;
 	/* Optional: for visual debugging */
 	border-radius: 15px;
 }

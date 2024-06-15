@@ -3,6 +3,40 @@ let sidebar = document.querySelector(".sidebar");
 let closeBtn = document.querySelector("#btn");
 let searchBtn = document.querySelector(".bx-search");
 let logoutBtn = document.querySelector("#logout-button");
+let firstRowDashboard = document.querySelector("#firstRowDashboard");
+let secondRowDashboard = document.querySelector("#secondRowDashboard");
+let paperChartResult = document.querySelector("#paperChartResult");
+let plasticChartResult = document.querySelector("#plasticChartResult");
+
+var windowWidth = window.innerWidth;
+if (windowWidth <= 1500) {
+    var mobileWiew = true;
+} else if (windowWidth > 1500) {
+    var mobileWiew = false;
+}
+
+function updateWindowWidth() {
+    firstRowDashboard = document.querySelector("#firstRowDashboard");
+    secondRowDashboard = document.querySelector("#secondRowDashboard");
+    paperChartResult = document.querySelector("#paperChartResult");
+    plasticChartResult = document.querySelector("#plasticChartResult");
+    windowWidth = window.innerWidth;
+
+    if (windowWidth <= 1550 && !mobileWiew) {
+        secondRowDashboard.appendChild(paperChartResult);
+        secondRowDashboard.appendChild(plasticChartResult);
+        mobileWiew = true;
+    }
+
+    if (windowWidth > 1550 && mobileWiew) {
+        firstRowDashboard.appendChild(paperChartResult);
+        firstRowDashboard.appendChild(plasticChartResult);
+        mobileWiew = false;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', updateWindowWidth);
+window.addEventListener('resize', updateWindowWidth);
 
 logoutBtn.addEventListener("click", () => {
     console.log("Logout clicked");
