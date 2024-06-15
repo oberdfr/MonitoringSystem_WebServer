@@ -78,8 +78,8 @@ function updateCurrentAirQuality() {
 document.addEventListener('DOMContentLoaded', function () {
     updateCurrentAirQuality()
     updateCurrentCo2()
-    setInterval(updateCurrentAirQuality, 1 * 1000); // Update every 5 minutes
-    setInterval(updateCurrentCo2, 1 * 1000); // Update every 5 minutes
+    setInterval(updateCurrentAirQuality, 5 * 1000); // Update every 5 minutes
+    setInterval(updateCurrentCo2, 5 * 1000); // Update every 5 minutes
 });
 
 function setFullHeight() {
