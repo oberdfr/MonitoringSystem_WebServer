@@ -9,7 +9,7 @@
 }
 
 body {
-  min-width: 720px;
+  min-width: 940px;
 }
 
 .sidebar {
@@ -324,6 +324,23 @@ body {
   border-radius: 15px;
   margin: max(20px, 2.5%);
   transition: transform .2s;
+}
+
+.result_air_dark {
+  background-color: #87bdf0;
+  border-radius: 15px;
+  margin: max(20px, 2.5%);
+  transition: transform .2s;
+}
+
+.result_air_dark_text {
+  background-color: #87bdf0;
+  border-radius: 15px;
+  margin: max(20px, 2.5%);
+  transition: transform .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .result_air_text {
