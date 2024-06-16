@@ -388,6 +388,11 @@ body {
 
 }
 
+.result_air_text:hover {
+  transform: scale(1.02);
+
+}
+
 .result_black:hover {
   transform: scale(1.02);
 }
