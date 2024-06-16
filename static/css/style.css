@@ -339,7 +339,7 @@ span {
   transition: transform .2s;
 }
 
-.result_air_dark_text {
+.result_air_dark_text_chip {
   background-color: #87bdf0;
   border-radius: 15px;
   margin: max(20px, 2.5%);
@@ -351,7 +351,6 @@ span {
   height: 100px;
   line-height: 100px;
   text-align: center;
-  border: 2px dashed #f69c55;
 }
 
 .result_air_text {
@@ -364,6 +363,29 @@ span {
   align-items: center;
   justify-content: center;
 }
+
+.result_air_dark_text {
+  background-color: #87bdf0;
+  border-radius: 15px;
+  margin: max(20px, 2.5%);
+  transition: transform .2s;
+  width: 50%;
+  height: 5vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.result_air_dark2_text {
+  background-color: #b5e0ff;
+  border-radius: 15px;
+  margin: max(20px, 2.5%);
+  transition: transform .2s;
+  width: 50%;
+  height: 5vh;
+  align-items: center;
+  justify-content: center;
+}
+
 
 .result_air_mon {
   background-color: #caf0f8;
@@ -447,8 +469,17 @@ td {
 }
 
 .label {
+  border-radius: 10px;
+  background-color: #87bdf0;
   font-size: 18px;
   margin-top: 10px;
+  height: 35px;
+  padding: 4px;
+  width: 30%;
+  margin-bottom: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 150px;
 }
 
 #temp {}
