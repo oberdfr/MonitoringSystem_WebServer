@@ -361,6 +361,9 @@ body {
   transition: transform .2s;
   margin-left: auto;
   margin-right: auto;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 .result_black {
@@ -411,20 +414,30 @@ td {
   margin: auto;
 }
 
+.info-container {
+  text-align: center;
+  margin: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  flex: 1;
+}
+
 .info {
-
-  background-color: rgb(75, 75, 75);
-  height: 90%;
-  width: 100%;
-  display: inline-block;
-  align-items: center;
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
+  background: #1d1b31;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   color: white;
-  font-size: 20px;
+  font-size: 24px;
+  margin: 0 auto;
+}
 
+.label {
+  font-size: 18px;
+  margin-top: 10px;
 }
 
 #temp {}
