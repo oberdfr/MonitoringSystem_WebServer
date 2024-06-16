@@ -2,6 +2,10 @@ let sidebar = document.querySelector(".sidebar");
 let closeBtn = document.querySelector("#btn");
 let searchBtn = document.querySelector(".bx-search");
 let logoutBtn = document.querySelector("#logout-button");
+let containerSide = document.getElementById('containerSide-by-side');
+let card1 = document.getElementById('card1');
+let card2 = document.getElementById('card2');
+resultCams = document.getElementById('resultCams');
 
 closeBtn.addEventListener("click", () => {
   sidebar.classList.toggle("open");
@@ -21,91 +25,66 @@ function menuBtnChange() {
   }
 }
 
+function isMobileDevice() {
+  console.log(/Mobi|Android|iPad|iPhone|iPod/.test(navigator.userAgent));
+  return /Mobi|Android|iPad|iPhone|iPod/.test(navigator.userAgent);
+}
+
+const DESKTOP_BIG = 1;
+const DESKTOP_LITTLE = 2;
+
+var windowWidth = window.innerWidth;
+var webWiew = 4;
+
+function updateWindowWidth() {
+
+  windowWidth = window.innerWidth;
+
+
+  if ((isMobileDevice() || windowWidth <= 1600) && webWiew != DESKTOP_LITTLE) {
+    card1.style.float = 'none';
+    card2.style.float = 'none';
+
+    resultCams.appendChild(card1);
+    resultCams.appendChild(card2);
+
+    webWiew = DESKTOP_LITTLE;
+  }
+
+  if (windowWidth > 1600 && webWiew != DESKTOP_BIG) {
+    card1.style.float = 'left';
+    card2.style.float = 'right';
+
+    containerSide.appendChild(card1);
+    containerSide.appendChild(card2);
+    webWiew = DESKTOP_BIG;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', updateWindowWidth);
+window.addEventListener('resize', updateWindowWidth);
+
 function logout() {
-    fetch("http://192.168.68.63:5000/logout", { credentials: 'include' })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.status);
-        })
-        .catch(error => console.log("Error logging out:", error));
+  fetch("http://192.168.68.63:5000/logout", { credentials: 'include' })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data.status);
+    })
+    .catch(error => console.log("Error logging out:", error));
 }
 
 logoutBtn.addEventListener("click", () => {
-    console.log("Logout clicked");
-    logout();
-    setTimeout(function () {
-        window.location.reload()
-    }, 2500);
+  console.log("Logout clicked");
+  logout();
+  setTimeout(function () {
+    window.location.reload()
+  }, 2500);
 
 });
 
-for (let i = 1; i < 3; i++) {
-    document.addEventListener("DOMContentLoaded", function () {
-        // Crea la card
-        var card = document.createElement('div');
-        card.classList.add('card');
-        card.classList.add('card');
-
-        card.style = "width: 641px"
-        card.style = "heigth: 400px"
-        card.style = "margin-right: 10%"
-
-        // Crea l'iframe
-        var iframeTop = document.createElement('iframe');
-        if (i == 1) {
-            iframeTop.src = 'http://192.168.100.204:8000/bgr';
-        }
-        if (i == 2) {
-            iframeTop.src = 'http://192.168.100.205:8000/bgr';
-        }
-
-        iframeTop.allow = 'autoplay';
-        iframeTop.width = 1920
-        iframeTop.height = 1080
-        iframeTop.classList.add('card-img-top')
-
-        card.appendChild(iframeTop);
-
-        // Crea il corpo della card
-        var cardBody = document.createElement('div');
-        cardBody.className = 'card-body';
-
-        // Crea il titolo della card
-        var cardTitle = document.createElement('h5');
-        cardTitle.className = 'card-title';
-        cardTitle.textContent = 'Card title';
-
-        // Crea il testo della card
-        var cardText = document.createElement('p');
-        cardText.className = 'card-text';
-        cardText.textContent = 'Some quick example text to build on the card title and make up the bulk of the card\'s content.';
-
-        // Crea il pulsante della card
-        var cardButton = document.createElement('a');
-        cardButton.classList.add('btn');
-        cardButton.classList.add('btn-primary');
-        cardButton.href = '#';
-        cardButton.textContent = 'Go somewhere';
-
-        // Aggiungi il titolo, il testo e il pulsante al corpo della card
-        cardBody.appendChild(cardTitle);
-        cardBody.appendChild(cardText);
-        cardBody.appendChild(cardButton);
-
-        // Aggiungi il corpo della card alla card
-        card.appendChild(cardBody);
-
-
-
-        // Aggiungi la card al container
-        document.querySelector('#card-container').append(card);
-    });
-
-}
-
 function setFullHeight() {
-    const section = document.getElementById('camHomeSection');
-    section.style.height = `${document.documentElement.scrollHeight}px`;
+  const section = document.getElementById('camHomeSection');
+  section.style.height = `${document.documentElement.scrollHeight}px`;
 }
 
 window.addEventListener('resize', setFullHeight);
