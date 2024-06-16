@@ -161,7 +161,12 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch('/weekbins')
             .then(response => response.json())
             .then(data => {
-                myNewChart.data.datasets[0].data = data.carta + data.plastica;
+                let dataTotal = data.carta
+                for (let i = 0; i < dataTotal.length; i++) {
+                    dataTotal[i] += data.plastica[i];
+                }
+                myNewChart.data.datasets[0].data = dataTotal;
+                console.log(dataTotal);
                 myNewChart.update();
             })
             .catch(error => console.error('Error fetching weekly bin data:', error));
