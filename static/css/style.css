@@ -386,7 +386,7 @@ span {
   margin: max(20px, 2.5%);
   transition: transform .2s;
   width: 50%;
-  height: 5vh;
+  height: 50px;
   align-items: center;
   justify-content: center;
 }
