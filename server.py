@@ -65,9 +65,6 @@ def reset_monthly_measurements():
         json.dump(blank_data, file)
     print("Monthly measurements reset at:", datetime.datetime.now())
 
-# Schedule the reset task at midnight every month
-schedule.every().month.at("00:00").do(reset_monthly_measurements)
-
 def reset_yearly_measurements():
     blank_data = {
         "carta": [0] * 12,
@@ -77,8 +74,15 @@ def reset_yearly_measurements():
         json.dump(blank_data, file)
     print("Yearly measurements reset at:", datetime.datetime.now())
 
-# Schedule the reset task at midnight every year
-schedule.every().year.at("00:00").do(reset_yearly_measurements)
+def check_and_reset():
+    now = datetime.datetime.now()
+    if now.day == 1 and now.hour == 0:
+        reset_monthly_measurements()
+    if now.month == 1 and now.day == 1 and now.hour == 0:
+        reset_yearly_measurements()
+
+# Schedule the check_and_reset function to run every day at midnight
+schedule.every().day.at("00:00").do(check_and_reset)
     
 
 # Function to keep the scheduler running
