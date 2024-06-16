@@ -55,6 +55,32 @@ def reset_weekly_measurements():
 # Schedule the reset task at midnight on Mondays
 schedule.every().monday.at("00:00").do(reset_weekly_measurements)
 
+
+def reset_monthly_measurements():
+    blank_data = {
+        "carta": [0] * 31,
+        "plastica": [0] * 31
+    }
+    with open(PERM_BIN_DATA_MONTH, 'w') as file:
+        json.dump(blank_data, file)
+    print("Monthly measurements reset at:", datetime.datetime.now())
+
+# Schedule the reset task at midnight every month
+schedule.every().month.at("00:00").do(reset_monthly_measurements)
+
+def reset_yearly_measurements():
+    blank_data = {
+        "carta": [0] * 12,
+        "plastica": [0] * 12
+    }
+    with open(PERM_BIN_DATA_YEAR, 'w') as file:
+        json.dump(blank_data, file)
+    print("Yearly measurements reset at:", datetime.datetime.now())
+
+# Schedule the reset task at midnight every year
+schedule.every().year.at("00:00").do(reset_yearly_measurements)
+    
+
 # Function to keep the scheduler running
 def run_scheduler():
     while True:
@@ -186,95 +212,75 @@ def is_json_file_empty(file_path):
     else:
         return True
     
+def update_week_data(percentCarta, percentPlastica, temp_data, now, file_path):
+    perm_weekdata = read_data(file_path, BIN_TYPE)
+    if not os.path.exists(file_path) or is_json_file_empty(file_path):
+        perm_weekdata = {"carta": [0]*7, "plastica": [0]*7}
+    emptyDiffCarta = abs(percentCarta - temp_data["carta"][-2])
+    emptyDiffPlastica = abs(percentPlastica - temp_data["plastica"][-2])
+    if emptyDiffCarta >= 10:
+        perm_weekdata["carta"][now.weekday()] += emptyDiffCarta
+    if emptyDiffPlastica >= 10:
+        perm_weekdata["plastica"][now.weekday()] += emptyDiffPlastica
+    write_data(perm_weekdata, file_path)
+
+def update_month_data(percentCarta, percentPlastica, temp_data, now, file_path):
+    perm_monthdata = read_data(file_path, BIN_TYPE)
+    if not os.path.exists(file_path) or is_json_file_empty(file_path):
+        perm_monthdata = {"carta": [0]*31, "plastica": [0]*31}
+    emptyDiffCarta = abs(percentCarta - temp_data["carta"][-2])
+    emptyDiffPlastica = abs(percentPlastica - temp_data["plastica"][-2])
+    if emptyDiffCarta >= 10:
+        perm_monthdata["carta"][now.day-1] += emptyDiffCarta
+    if emptyDiffPlastica >= 10:
+        perm_monthdata["plastica"][now.day-1] += emptyDiffPlastica
+    write_data(perm_monthdata, file_path)
+
+def update_year_data(percentCarta, percentPlastica, temp_data, now, file_path):
+    perm_yeardata = read_data(file_path, BIN_TYPE)
+    if not os.path.exists(file_path) or is_json_file_empty(file_path):
+        perm_yeardata = {"carta": [0]*12, "plastica": [0]*12}
+    emptyDiffCarta = abs(percentCarta - temp_data["carta"][-2])
+    emptyDiffPlastica = abs(percentPlastica - temp_data["plastica"][-2])
+    if emptyDiffCarta >= 10:
+        perm_yeardata["carta"][now.month-1] += emptyDiffCarta
+    if emptyDiffPlastica >= 10:
+        perm_yeardata["plastica"][now.month-1] += emptyDiffPlastica
+    write_data(perm_yeardata, file_path)
+    
 @app.route('/sendbin')
 def getBin():
     misCarta = int(request.args.get("miscarta", 0))
     misPlastica = int(request.args.get("misplastica", 0))
-    print("carta percentuali prima di round:")
     percentCarta = convertBinData(misCarta, BIDONE_CARTA)
-    print("plastica percentuali prima di round:")
     percentPlastica = convertBinData(misPlastica, BIDONE_PLASTICA)
 
     temp_data = read_data(TMP_BIN_DATA, BIN_TYPE)
-
-    # Get the current date and time
     now = datetime.datetime.now()
     
-    # Update the carta values
+    # Update temp data
     temp_data["carta"].append(percentCarta)
     if len(temp_data["carta"]) > 10:
         temp_data["carta"].pop(0)
-    
-    # Update the plastica values
     temp_data["plastica"].append(percentPlastica)
     if len(temp_data["plastica"]) > 10:
         temp_data["plastica"].pop(0)
-
     write_data(temp_data, TMP_BIN_DATA)
 
-    # --- TOTAL DATA ---
-    # calc paper bin diff if emptied
-    try:
-        emptyDiffCarta = abs(percentCarta - temp_data["carta"][len(temp_data["carta"]) - 2])
-        print("differenza carta:")
-        print(emptyDiffCarta)
-        if (emptyDiffCarta >= 10):
-            perm_data = read_data(PERM_BIN_DATA_TOTAL, BIN_TYPE)
-            if perm_data["carta"][0]:
-                perm_data["carta"][0] = (perm_data["carta"][0] + emptyDiffCarta)
-                write_data(perm_data, PERM_BIN_DATA_TOTAL)
-    except (KeyError, IndexError):
-        perm_data = read_data(PERM_BIN_DATA_TOTAL, BIN_TYPE)
-        perm_data["carta"].append(emptyDiffCarta)
-        write_data(perm_data, PERM_BIN_DATA_TOTAL)
+    # Update permanent total data
+    update_perm_data(percentCarta, percentPlastica, temp_data, PERM_BIN_DATA_TOTAL)
 
-    # calc plastic bin diff if emptied
-    try:
-        emptyDiffPlastica = abs(percentPlastica - (temp_data["plastica"][len(temp_data["plastica"]) - 2]))
-        print("differenza plastica:")
-        print(emptyDiffPlastica)
-        if (emptyDiffPlastica >= 10):
-            perm_data = read_data(PERM_BIN_DATA_TOTAL, BIN_TYPE)
-            if perm_data["plastica"][0]:
-                perm_data["plastica"][0] = (perm_data["plastica"][0] + emptyDiffPlastica)
-            write_data(perm_data, PERM_BIN_DATA_TOTAL)
-    except (KeyError, IndexError):
-        perm_data = read_data(PERM_BIN_DATA_TOTAL, BIN_TYPE)
-        perm_data["plastica"].append(emptyDiffPlastica)
-        write_data(perm_data, PERM_BIN_DATA_TOTAL)
-    # --- TOTAL DATA END ---
+    # Update weekly data
+    update_week_data(percentCarta, percentPlastica, temp_data, now, PERM_BIN_DATA_WEEK)
 
-    # --- WEEK DATA ---
-    perm_weekdata = read_data(PERM_BIN_DATA_WEEK, BIN_TYPE)
+    # Update monthly data
+    update_month_data(percentCarta, percentPlastica, temp_data, now, PERM_BIN_DATA_MONTH)
 
-    if not ((os.path.exists(PERM_BIN_DATA_WEEK)) or (is_json_file_empty(PERM_BIN_DATA_WEEK) == False)):
-        for i in range(7):
-            perm_weekdata = read_data(BLANK_FILE, BIN_TYPE)
-            perm_weekdata["carta"].append(0)
-            perm_weekdata["plastica"].append(0)
-            write_data(perm_weekdata, PERM_BIN_DATA_WEEK)
+    # Update yearly data
+    update_year_data(percentCarta, percentPlastica, temp_data, now, PERM_BIN_DATA_YEAR)
 
-
-    emptyDiffCarta = abs(percentCarta - temp_data["carta"][len(temp_data["carta"]) - 2])
-    emptyDiffPlastica = abs(percentPlastica - (temp_data["plastica"][len(temp_data["plastica"]) - 2]))
-    if (emptyDiffCarta >= 10):
-        perm_weekdata = read_data(PERM_BIN_DATA_WEEK, BIN_TYPE)
-        print(perm_weekdata)
-        print(now.weekday())
-        perm_weekdata["carta"][now.weekday()] = (perm_weekdata["carta"][now.weekday()] + emptyDiffCarta)
-        write_data(perm_weekdata, PERM_BIN_DATA_WEEK)
-    if (emptyDiffPlastica >= 10):
-        perm_weekdata = read_data(PERM_BIN_DATA_WEEK, BIN_TYPE)
-        perm_weekdata["plastica"][now.weekday()] = (perm_weekdata["plastica"][now.weekday()] + emptyDiffPlastica)
-        write_data(perm_weekdata, PERM_BIN_DATA_WEEK)
-    # --- WEEK DATA END ---
-
-    # debug
-    print("distanza carta: " + str(misCarta))
-    print("distanza plastica: " + str(misPlastica))
-    print("percentuale carta: " + str(percentCarta))
-    print("percentuale plastica: " + str(percentPlastica))
-    
+    print(f"Distanza carta: {misCarta}, plastica: {misPlastica}")
+    print(f"Percentuale carta: {percentCarta}, plastica: {percentPlastica}")
     return jsonify(status="bin mis sent")
 
 @app.route('/latestbins')
