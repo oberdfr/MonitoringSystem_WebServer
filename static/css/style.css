@@ -433,6 +433,11 @@ span {
   transform: scale(1.02);
 }
 
+.result_air_mon:hover {
+  transform: scale(1.02);
+
+}
+
 #tab_stat,
 tr,
 td {
