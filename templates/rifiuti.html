@@ -104,20 +104,26 @@
       </div>
     </div>
 
-    <div class="result_air" style="padding: 50px;">
-      <div>Statistiche Settimanali</div>
-      <canvas id="myChart" width="100"></canvas>
-    </div>
+    <div id="chartContainer">
 
-    <div class="result_air" style="padding: 50px;">
-      <div>Statistiche Settimanali</div>
-      <canvas id="myChart2" width="100"></canvas>
-    </div>
+      <div id="containerSide-by-side" class="container-side-by-side" style="margin-bottom: 40px;">
+        <div id="weekChart" class="result_air" style="padding: 50px; width: 45%; margin: auto; float: left;">
+          <div>Statistiche Settimanali</div>
+          <canvas id="myChart" style="margin: 0;"></canvas>
+        </div>
 
-    <div class="result_air" style="padding: 50px;">
-      <canvas id="myChart3" width="100"></canvas>
-    </div>
+        <div id="yearChart" class="result_air" style="padding: 50px; width: 45%; margin: auto; float: right;">
+          <div>Statistiche Annuali</div>
+          <canvas id="myChart3" style="margin: 0;"></canvas>
+        </div>
+      </div>
 
+      <div id="monthChart" class="result_air" style="padding: 50px; width: 50%; margin: auto; margin-bottom: 40px;">
+        <div>Statistiche Mensili</div>
+        <canvas id="myChart2" style="margin: 0;"></canvas>
+      </div>
+
+    </div>
   </section>
 
   <script src="static/js/rifiuti.js"></script>

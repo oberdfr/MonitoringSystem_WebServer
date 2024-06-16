@@ -2,6 +2,91 @@ let sidebar = document.querySelector(".sidebar");
 let closeBtn = document.querySelector("#btn");
 let searchBtn = document.querySelector(".bx-search");
 let logoutBtn = document.querySelector("#logout-button");
+let weekChart = document.getElementById('weekChart');
+let monthChart = document.getElementById('monthChart');
+let yearChart = document.getElementById('yearChart');
+let sidebysideContainer = document.getElementById('containerSide-by-side');
+var chartContainer = document.getElementById('chartContainer')
+
+function isMobileDevice() {
+    console.log(/Mobi|Android|iPad|iPhone|iPod/.test(navigator.userAgent));
+    return /Mobi|Android|iPad|iPhone|iPod/.test(navigator.userAgent);
+}
+
+const DESKTOP_BIG = 1;
+const DESKTOP_LITTLE = 2;
+const MOBILE = 3;
+
+var windowWidth = window.innerWidth;
+var webWiew = 4;
+
+function updateWindowWidth() {
+    console.log('weekChart:', weekChart);
+    console.log('monthChart:', monthChart);
+    console.log('yearChart:', yearChart);
+
+    windowWidth = window.innerWidth;
+
+    if ((isMobileDevice() || windowWidth <= 1000) && webWiew != MOBILE) {
+        weekChart.style.width = '80%';
+        monthChart.style.width = '80%';
+        yearChart.style.width = '80%';
+
+        weekChart.style.float = 'none';
+        yearChart.style.float = 'none';
+
+        weekChart.style.marginBottom = '40px';
+        monthChart.style.marginBottom = '40px';
+        yearChart.style.marginBottom = '40px';
+        chartContainer.appendChild(weekChart);
+        chartContainer.appendChild(monthChart);
+        chartContainer.appendChild(yearChart)
+        webWiew = MOBILE;
+    }
+
+    if (windowWidth <= 1550 && windowWidth > 1000 && webWiew != DESKTOP_LITTLE) {
+        weekChart.style.width = '70%';
+        monthChart.style.width = '70%';
+        yearChart.style.width = '70%';
+
+        weekChart.style.float = 'none';
+        yearChart.style.float = 'none';
+
+        weekChart.style.marginBottom = '40px';
+        monthChart.style.marginBottom = '40px';
+        yearChart.style.marginBottom = '40px';
+
+        chartContainer.appendChild(weekChart);
+        chartContainer.appendChild(monthChart);
+        chartContainer.appendChild(yearChart)
+        webWiew = DESKTOP_LITTLE;
+    }
+
+    if (windowWidth > 1550 && webWiew != DESKTOP_BIG) {
+
+        weekChart.style.width = '45%';
+        yearChart.style.width = '45%';
+        monthChart.style.width = '50%';
+
+        weekChart.style.float = 'left';
+        yearChart.style.float = 'right';
+
+        weekChart.style.marginBottom = 'auto';
+        monthChart.style.marginBottom = '40px';
+        yearChart.style.marginBottom = 'auto';
+
+        sidebysideContainer.appendChild(weekChart);
+        sidebysideContainer.appendChild(yearChart);
+        chartContainer.appendChild(sidebysideContainer);
+        chartContainer.appendChild(monthChart);
+
+        webWiew = DESKTOP_BIG;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', updateWindowWidth);
+window.addEventListener('resize', updateWindowWidth);
+
 
 closeBtn.addEventListener("click", () => {
     sidebar.classList.toggle("open");
