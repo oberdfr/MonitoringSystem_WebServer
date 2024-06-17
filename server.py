@@ -307,6 +307,20 @@ def week_bins():
     response.headers['Cache-Control'] = 'no-store'
     return response
 
+@app.route('/monthbins')
+def month_bins():
+    data = read_data(PERM_BIN_DATA_MONTH, BIN_TYPE)
+    response = jsonify(data)
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+@app.route('/yearbins')
+def year_bins():
+    data = read_data(PERM_BIN_DATA_YEAR, BIN_TYPE)
+    response = jsonify(data)
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
 @app.route('/latestco2')
 def latest_co2():
     data = read_data(PERM_AIR_DATA, AIR_TYPE)

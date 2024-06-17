@@ -222,6 +222,25 @@ document.addEventListener("DOMContentLoaded", function () {
         data: data,
         options: options
     });
+
+    function updateMonthlyBinData() {
+        fetch('/monthbins')
+            .then(response => response.json())
+            .then(data => {
+                let dataTotal = data.carta
+                for (let i = 0; i < dataTotal.length; i++) {
+                    dataTotal[i] += data.plastica[i];
+                }
+                myNewChart.data.datasets[0].data = dataTotal;
+                console.log(dataTotal);
+                myNewChart.update();
+            })
+            .catch(error => console.error('Error fetching weekly bin data:', error));
+    }
+
+    // Fetch weekly data on load and update the chart
+    updateMonthlyBinData();
+    setInterval(updateMonthlyBinData, 5000); // Update every 5 seconds
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -269,6 +288,25 @@ document.addEventListener("DOMContentLoaded", function () {
         data: data,
         options: options
     });
+
+    function updateYearlyBinData() {
+        fetch('/yearbins')
+            .then(response => response.json())
+            .then(data => {
+                let dataTotal = data.carta
+                for (let i = 0; i < dataTotal.length; i++) {
+                    dataTotal[i] += data.plastica[i];
+                }
+                myNewChart.data.datasets[0].data = dataTotal;
+                console.log(dataTotal);
+                myNewChart.update();
+            })
+            .catch(error => console.error('Error fetching weekly bin data:', error));
+    }
+
+    // Fetch weekly data on load and update the chart
+    updateYearlyBinData();
+    setInterval(updateYearlyBinData, 5000); // Update every 5 seconds
 });
 
 function fillCircle(type, percentage) {
