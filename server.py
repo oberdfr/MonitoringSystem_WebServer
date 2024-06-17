@@ -222,37 +222,40 @@ def update_week_data(percentCarta, percentPlastica, temp_data, now, file_path):
     perm_weekdata = read_data(file_path, BIN_TYPE)
     if not os.path.exists(file_path) or is_json_file_empty(file_path):
         perm_weekdata = {"carta": [0]*7, "plastica": [0]*7}
-    emptyDiffCarta = abs(percentCarta - temp_data["carta"][-2])
-    emptyDiffPlastica = abs(percentPlastica - temp_data["plastica"][-2])
-    if emptyDiffCarta >= 10:
-        perm_weekdata["carta"][now.weekday()] += emptyDiffCarta
-    if emptyDiffPlastica >= 10:
-        perm_weekdata["plastica"][now.weekday()] += emptyDiffPlastica
-    write_data(perm_weekdata, file_path)
+    if(percentCarta - temp_data["carta"][-2] or percentPlastica - temp_data["plastica"][-2] < 0):
+        emptyDiffCarta = abs(percentCarta - temp_data["carta"][-2])
+        emptyDiffPlastica = abs(percentPlastica - temp_data["plastica"][-2])
+        if emptyDiffCarta >= 20:
+            perm_weekdata["carta"][now.weekday()] += emptyDiffCarta
+        if emptyDiffPlastica >= 20:
+            perm_weekdata["plastica"][now.weekday()] += emptyDiffPlastica
+        write_data(perm_weekdata, file_path)
 
 def update_month_data(percentCarta, percentPlastica, temp_data, now, file_path):
     perm_monthdata = read_data(file_path, BIN_TYPE)
     if not os.path.exists(file_path) or is_json_file_empty(file_path):
         perm_monthdata = {"carta": [0]*31, "plastica": [0]*31}
-    emptyDiffCarta = abs(percentCarta - temp_data["carta"][-2])
-    emptyDiffPlastica = abs(percentPlastica - temp_data["plastica"][-2])
-    if emptyDiffCarta >= 10:
-        perm_monthdata["carta"][now.day-1] += emptyDiffCarta
-    if emptyDiffPlastica >= 10:
-        perm_monthdata["plastica"][now.day-1] += emptyDiffPlastica
-    write_data(perm_monthdata, file_path)
+    if(percentCarta - temp_data["carta"][-2] or percentPlastica - temp_data["plastica"][-2] < 0):
+        emptyDiffCarta = abs(percentCarta - temp_data["carta"][-2])
+        emptyDiffPlastica = abs(percentPlastica - temp_data["plastica"][-2])
+        if emptyDiffCarta >= 20:
+            perm_monthdata["carta"][now.day-1] += emptyDiffCarta
+        if emptyDiffPlastica >= 20:
+            perm_monthdata["plastica"][now.day-1] += emptyDiffPlastica
+        write_data(perm_monthdata, file_path)
 
 def update_year_data(percentCarta, percentPlastica, temp_data, now, file_path):
     perm_yeardata = read_data(file_path, BIN_TYPE)
     if not os.path.exists(file_path) or is_json_file_empty(file_path):
         perm_yeardata = {"carta": [0]*12, "plastica": [0]*12}
-    emptyDiffCarta = abs(percentCarta - temp_data["carta"][-2])
-    emptyDiffPlastica = abs(percentPlastica - temp_data["plastica"][-2])
-    if emptyDiffCarta >= 10:
-        perm_yeardata["carta"][now.month-1] += emptyDiffCarta
-    if emptyDiffPlastica >= 10:
-        perm_yeardata["plastica"][now.month-1] += emptyDiffPlastica
-    write_data(perm_yeardata, file_path)
+    if(percentCarta - temp_data["carta"][-2] or percentPlastica - temp_data["plastica"][-2] < 0):
+        emptyDiffCarta = abs(percentCarta - temp_data["carta"][-2])
+        emptyDiffPlastica = abs(percentPlastica - temp_data["plastica"][-2])
+        if emptyDiffCarta >= 20:
+            perm_yeardata["carta"][now.month-1] += emptyDiffCarta
+        if emptyDiffPlastica >= 20:
+            perm_yeardata["plastica"][now.month-1] += emptyDiffPlastica
+        write_data(perm_yeardata, file_path)
     
 @app.route('/sendbin')
 def getBin():
