@@ -36,7 +36,8 @@ PERM_BIN_DATA_WEEK = 'perm_bin_data_week.json'
 PERM_BIN_DATA_MONTH = 'perm_bin_data_month.json'
 PERM_BIN_DATA_YEAR = 'perm_bin_data_year.json'
 TMP_AIR_DATA = 'tmp_air_data.json'
-PERM_AIR_DATA = 'perm_air_data.json'
+TMP_AIR_DATA_PP = 'tmp_air_data_pp.json'
+TMP_AIR_DATA_S = 'tmp_air_data_s.json'
 # data types
 AIR_TYPE = {"MQ2": [], "MQ7": []}
 BIN_TYPE = {"carta": [], "plastica": []}
@@ -150,20 +151,45 @@ def getP():
     print(p)
     return jsonify(status="people sent")
 
-@app.route('/sendqoa')
-def getQoa():
-    val = request.args.get("qa")
-    val2 = request.args.get("co2")
+@app.route('/sendqoapp')
+def getQoaPP():
+    misMQ2 = request.args.get("qa")
+    misMQ7 = request.args.get("co2")
     print("qualita: ")
-    print(val)
+    print(misMQ2)
     print("co2")
-    print(val2)
-    data = read_data(PERM_AIR_DATA, AIR_TYPE)
-    data["MQ7"].append(val2)
-    data["MQ2"].append(val)
-    write_data(data, PERM_AIR_DATA)
+    print(misMQ7)
+    data = read_data(TMP_AIR_DATA_PP, AIR_TYPE)
+
+    data["MQ2"].append(misMQ2)
+    if len(data["MQ2"]) > 10:
+        data["MQ2"].pop(0)
+    data["MQ7"].append(misMQ7)
+    if len(data["MQ7"]) > 10:
+        data["MQ7"].pop(0)
+        
+    write_data(data, TMP_AIR_DATA_PP)
     return jsonify(status="people sent")
 
+@app.route('/sendqoas')
+def getQoaS():
+    misMQ2 = request.args.get("qa")
+    misMQ7 = request.args.get("co2")
+    print("qualita: ")
+    print(misMQ2)
+    print("co2")
+    print(misMQ7)
+    data = read_data(TMP_AIR_DATA_S, AIR_TYPE)
+
+    data["MQ2"].append(misMQ2)
+    if len(data["MQ2"]) > 10:
+        data["MQ2"].pop(0)
+    data["MQ7"].append(misMQ7)
+    if len(data["MQ7"]) > 10:
+        data["MQ7"].pop(0)
+
+    write_data(data, TMP_AIR_DATA_S)
+    return jsonify(status="people sent")
 
 # Function to read data from the file
 def read_data(fileToRead, type):
@@ -321,9 +347,9 @@ def year_bins():
     response.headers['Cache-Control'] = 'no-store'
     return response
 
-@app.route('/latestco2')
-def latest_co2():
-    data = read_data(PERM_AIR_DATA, AIR_TYPE)
+@app.route('/latestco2s')
+def latest_co2S():
+    data = read_data(TMP_AIR_DATA_S, AIR_TYPE)
     latest_data = {
         "MQ7": data["MQ7"][len(data["MQ7"]) - 1] if data["MQ7"] else 0,
     }
@@ -331,9 +357,29 @@ def latest_co2():
     response.headers['Cache-Control'] = 'no-store'
     return response
 
-@app.route('/latestairquality')
-def latest_airquality():
-    data = read_data(PERM_AIR_DATA, AIR_TYPE)
+@app.route('/latestco2pp')
+def latest_co2PP():
+    data = read_data(TMP_AIR_DATA_PP, AIR_TYPE)
+    latest_data = {
+        "MQ7": data["MQ7"][len(data["MQ7"]) - 1] if data["MQ7"] else 0,
+    }
+    response = jsonify(latest_data)
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+@app.route('/latestairqualitys')
+def latest_airqualityS():
+    data = read_data(TMP_AIR_DATA_S, AIR_TYPE)
+    latest_data = {
+        "MQ2": data["MQ2"][len(data["MQ2"]) - 1] if data["MQ2"] else 0,
+    }
+    response = jsonify(latest_data)
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+@app.route('/latestairqualitypp')
+def latest_airqualityPP():
+    data = read_data(TMP_AIR_DATA_PP, AIR_TYPE)
     latest_data = {
         "MQ2": data["MQ2"][len(data["MQ2"]) - 1] if data["MQ2"] else 0,
     }

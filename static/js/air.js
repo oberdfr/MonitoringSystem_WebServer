@@ -1,6 +1,8 @@
-var co2 = document.getElementById('co2')
+var co2_s = document.getElementById('co2_s')
+var co2_pp = document.getElementById('co2_pp')
 var temp = document.getElementById('temp')
-var qualita = document.getElementById('qualita')
+var qualita_s = document.getElementById('qualita_s')
+var qualita_pp = document.getElementById('qualita_pp')
 var piove = document.getElementById('piove')
 let primoPianoContainer = document.getElementById('primoPianoContainer')
 let seminterratoContainer = document.getElementById('seminterratoContainer')
@@ -12,21 +14,21 @@ let searchBtn = document.querySelector(".bx-search");
 let logoutBtn = document.querySelector("#logout-button");
 
 closeBtn.addEventListener("click", () => {
-  sidebar.classList.toggle("open");
-  menuBtnChange();
+    sidebar.classList.toggle("open");
+    menuBtnChange();
 });
 
 searchBtn.addEventListener("click", () => {
-  sidebar.classList.toggle("open");
-  menuBtnChange();
+    sidebar.classList.toggle("open");
+    menuBtnChange();
 });
 
 function menuBtnChange() {
-  if (sidebar.classList.contains("open")) {
-    closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
-  } else {
-    closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
-  }
+    if (sidebar.classList.contains("open")) {
+        closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+    } else {
+        closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+    }
 }
 
 function logout() {
@@ -86,21 +88,37 @@ document.addEventListener('DOMContentLoaded', updateWindowWidth);
 window.addEventListener('resize', updateWindowWidth);
 
 function updateCurrentCo2() {
-    fetch('/latestco2')
+    fetch('/latestco2s')
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            co2.innerHTML = data.MQ7 + " ppm";
+            co2_s.innerHTML = data.MQ7 + " ppm";
+        })
+        .catch(error => console.error('Error fetching bin data:', error));
+
+    fetch('/latestco2pp')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            co2_pp.innerHTML = data.MQ7 + " ppm";
         })
         .catch(error => console.error('Error fetching bin data:', error));
 }
 
 function updateCurrentAirQuality() {
-    fetch('/latestairquality')
+    fetch('/latestairqualitys')
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            qualita.innerHTML = data.MQ2 + " ppm";
+            qualita_s.innerHTML = data.MQ2 + " ppm";
+        })
+        .catch(error => console.error('Error fetching bin data:', error));
+
+    fetch('/latestairqualitypp')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            qualita_pp.innerHTML = data.MQ2 + " ppm";
         })
         .catch(error => console.error('Error fetching bin data:', error));
 }
