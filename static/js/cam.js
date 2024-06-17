@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', updateWindowWidth);
 window.addEventListener('resize', updateWindowWidth);
 
 function logout() {
-  fetch("http://192.168.68.63:5000/logout", { credentials: 'include' })
+  fetch("http://192.168.100.103:5000/logout", { credentials: 'include' })
     .then(response => response.json())
     .then(data => {
       console.log(data.status);
