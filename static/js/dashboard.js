@@ -122,3 +122,41 @@ function setFullHeight() {
 
 window.addEventListener('resize', setFullHeight);
 window.addEventListener('DOMContentLoaded', setFullHeight);
+
+function fillCircle(type, percentage) {
+    const circle = document.getElementById(`circle${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    const text = circle.nextElementSibling;
+    const radius = 12.9155;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (percentage / 100) * circumference;
+
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    circle.style.strokeDashoffset = `${circumference}`;
+
+    setTimeout(() => {
+        //console.log(circle.style.strokeDashoffset);
+        //console.log(`${offset}`);
+        //console.log(text.textContent);
+        //console.log(`${percentage}%`);
+        //if (text.textContent != `${percentage}%`) {
+        circle.style.strokeDashoffset = `${offset}`;
+        text.textContent = `${percentage}%`;
+        //}
+
+    }, 10);
+}
+
+function updateBinData() {
+    fetch('/latestbins')
+        .then(response => response.json())
+        .then(data => {
+            fillCircle('carta', data.carta);
+            fillCircle('plastica', data.plastica);
+        })
+        .catch(error => console.error('Error fetching bin data:', error));
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    updateBinData();
+    setInterval(updateBinData, 1 * 5000); // Update every 5 seconds
+});
