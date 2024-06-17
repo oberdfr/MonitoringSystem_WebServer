@@ -33,6 +33,8 @@ BLANK_FILE = 'blankfile'
 TMP_BIN_DATA = 'tmp_bin_data.json'
 PERM_BIN_DATA_TOTAL = 'perm_bin_data_total.json'
 PERM_BIN_DATA_WEEK = 'perm_bin_data_week.json'
+PERM_BIN_DATA_MONTH = 'perm_bin_data_month.json'
+PERM_BIN_DATA_YEAR = 'perm_bin_data_year.json'
 TMP_AIR_DATA = 'tmp_air_data.json'
 PERM_AIR_DATA = 'perm_air_data.json'
 # data types
@@ -272,7 +274,7 @@ def getBin():
     write_data(temp_data, TMP_BIN_DATA)
 
     # Update permanent total data
-    update_perm_data(percentCarta, percentPlastica, temp_data, PERM_BIN_DATA_TOTAL)
+    #update_perm_data(percentCarta, percentPlastica, temp_data, PERM_BIN_DATA_TOTAL)
 
     # Update weekly data
     update_week_data(percentCarta, percentPlastica, temp_data, now, PERM_BIN_DATA_WEEK)
