@@ -38,9 +38,11 @@ PERM_BIN_DATA_YEAR = 'perm_bin_data_year.json'
 TMP_AIR_DATA = 'tmp_air_data.json'
 TMP_AIR_DATA_PP = 'tmp_air_data_pp.json'
 TMP_AIR_DATA_S = 'tmp_air_data_s.json'
+TMP_PEOPLE_DATA = 'tmp_people_data.json'
 # data types
 AIR_TYPE = {"MQ2": [], "MQ7": []}
 BIN_TYPE = {"carta": [], "plastica": []}
+PEOPLE_TYPE = {"primopiano": [], "seminterrato": []}
 
 def reset_weekly_measurements():
     if os.path.exists(PERM_BIN_DATA_WEEK):
@@ -145,12 +147,6 @@ def send_static(path):
 def error():
     return render_template('error.html')
 
-@app.route('/sendpeople')
-def getP():
-    p = request.args.get("people")
-    print(p)
-    return jsonify(status="people sent")
-
 @app.route('/sendqoapp')
 def getQoaPP():
     misMQ2 = request.args.get("qa")
@@ -169,7 +165,7 @@ def getQoaPP():
         data["MQ7"].pop(0)
         
     write_data(data, TMP_AIR_DATA_PP)
-    return jsonify(status="people sent")
+    return jsonify(status="qoa sent")
 
 @app.route('/sendqoas')
 def getQoaS():
@@ -189,7 +185,7 @@ def getQoaS():
         data["MQ7"].pop(0)
 
     write_data(data, TMP_AIR_DATA_S)
-    return jsonify(status="people sent")
+    return jsonify(status="qoa sent")
 
 # Function to read data from the file
 def read_data(fileToRead, type):
@@ -382,6 +378,45 @@ def latest_airqualityPP():
     data = read_data(TMP_AIR_DATA_PP, AIR_TYPE)
     latest_data = {
         "MQ2": data["MQ2"][len(data["MQ2"]) - 1] if data["MQ2"] else 0,
+    }
+    response = jsonify(latest_data)
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+@app.route('/mandacounters')
+def getPeopleS():
+    people = request.args.get("people")
+    print("people in seminterrato: ")
+    print(people)
+    data = read_data(TMP_PEOPLE_DATA, PEOPLE_TYPE)
+
+    data["seminterrato"].append(people)
+    if len(data["seminterrato"]) > 10:
+        data["seminterrato"].pop(0)
+
+    write_data(data, TMP_PEOPLE_DATA)
+    return jsonify(status="people sent")
+
+@app.route('/mandacounterpp')
+def getPeoplePP():
+    people = request.args.get("people")
+    print("people in primo piano: ")
+    print(people)
+    data = read_data(TMP_PEOPLE_DATA, PEOPLE_TYPE)
+
+    data["primopiano"].append(people)
+    if len(data["primopiano"]) > 10:
+        data["primopiano"].pop(0)
+
+    write_data(data, TMP_PEOPLE_DATA)
+    return jsonify(status="people sent")
+
+@app.route('/latestpeople')
+def latest_people():
+    data = read_data(TMP_PEOPLE_DATA, PEOPLE_TYPE)
+    latest_data = {
+        "seminterrato": data["seminterrato"][-1] if data["seminterrato"] else 0,
+        "primopiano": data["primopiano"][-1] if data["primopiano"] else 0,
     }
     response = jsonify(latest_data)
     response.headers['Cache-Control'] = 'no-store'

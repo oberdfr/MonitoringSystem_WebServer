@@ -89,3 +89,26 @@ function setFullHeight() {
 
 window.addEventListener('resize', setFullHeight);
 window.addEventListener('DOMContentLoaded', setFullHeight);
+
+function setNPeople(peoplePP, peopleS) {
+  peopleScont = document.getElementById('nPeople-s');
+  peoplePPcont = document.getElementById('nPeople-pp');
+
+  peopleScont.innerHTML = parseInt(peopleS);
+  peoplePPcont.innerHTML = parseInt(peoplePP);
+
+}
+
+function updateNPeople() {
+  fetch('/latestpeople')
+    .then(response => response.json())
+    .then(data => {
+      setNPeople(data.primopiano, data.seminterrato);
+    })
+    .catch(error => console.error('Error fetching people data:', error));
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  updateNPeople();
+  setInterval(updateNPeople, 1 * 1000); // Update every 1 seconds
+});
