@@ -30,7 +30,7 @@ function menuBtnChange() {
 }
 
 function logout() {
-    fetch("http://192.168.100.103:5000/logout", { credentials: 'include' })
+    fetch("http://192.168.100.102:5000/logout", { credentials: 'include' })
         .then(response => response.json())
         .then(data => {
             console.log(data.status);

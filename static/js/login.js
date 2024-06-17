@@ -13,7 +13,7 @@ function getUser() {
 function posso() {
     let pwd = getPwd();
     let user = getUser();
-    let string = "http://192.168.100.103:5000/posso?user=" + user + "&pwd=" + pwd;
+    let string = "http://192.168.100.102:5000/posso?user=" + user + "&pwd=" + pwd;
 
     fetch(string, { credentials: 'include' })  // Include credentials in the request
         .then(response => {
@@ -35,11 +35,11 @@ function posso() {
 }
 
 function checkSession() {
-    fetch("http://192.168.100.103:5000/check_session", { credentials: 'include' })
+    fetch("http://192.168.100.102:5000/check_session", { credentials: 'include' })
         .then(response => response.json())
         .then(data => {
             if (data.status === "authenticated") {
-                window.location.href = "http://192.168.100.103:5000/dashboard.html";
+                window.location.href = "http://192.168.100.102:5000/dashboard.html";
             }
         })
         .catch(error => console.log("Error checking session:", error));
