@@ -259,10 +259,8 @@ def update_year_data(percentCarta, percentPlastica, temp_data, now, file_path):
     
 @app.route('/sendbin')
 def getBin():
-    misCarta = int(request.args.get("miscarta", 0))
-    misPlastica = int(request.args.get("misplastica", 0))
-    percentCarta = convertBinData(misCarta, BIDONE_CARTA)
-    percentPlastica = convertBinData(misPlastica, BIDONE_PLASTICA)
+    percentCarta = int(request.args.get("miscarta", 0))
+    percentPlastica = int(request.args.get("misplastica", 0))
 
     temp_data = read_data(TMP_BIN_DATA, BIN_TYPE)
     now = datetime.datetime.now()
@@ -288,7 +286,6 @@ def getBin():
     # Update yearly data
     update_year_data(percentCarta, percentPlastica, temp_data, now, PERM_BIN_DATA_YEAR)
 
-    print(f"Distanza carta: {misCarta}, plastica: {misPlastica}")
     print(f"Percentuale carta: {percentCarta}, plastica: {percentPlastica}")
     return jsonify(status="bin mis sent")
 
