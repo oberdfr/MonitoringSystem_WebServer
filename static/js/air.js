@@ -127,9 +127,9 @@ function updateSummary() {
     let qualitaPrimoPiano = parseFloat(qualita_pp.innerHTML);
 
     function calculateQuality(co2, qualita) {
-        if (co2 < 800 && qualita < 200) {
+        if (co2 < 550 && qualita < 500) {
             return "GOOD";
-        } else if ((co2 >= 800 && co2 < 1500) || (qualita >= 200 && qualita < 400)) {
+        } else if ((co2 >= 550 && co2 < 900) || (qualita >= 500 && qualita < 700)) {
             return "MEDIOCRE";
         } else {
             return "BAD";
