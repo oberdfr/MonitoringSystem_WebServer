@@ -1,17 +1,19 @@
-var co2_s = document.getElementById('co2_s')
-var co2_pp = document.getElementById('co2_pp')
-var temp = document.getElementById('temp')
-var qualita_s = document.getElementById('qualita_s')
-var qualita_pp = document.getElementById('qualita_pp')
-var piove = document.getElementById('piove')
-let primoPianoContainer = document.getElementById('primoPianoContainer')
-let seminterratoContainer = document.getElementById('seminterratoContainer')
-let airRow1 = document.getElementById('airRow1')
-let airRow2 = document.getElementById('airRow2')
+var co2_s = document.getElementById('co2_s');
+var co2_pp = document.getElementById('co2_pp');
+var temp = document.getElementById('temp');
+var qualita_s = document.getElementById('qualita_s');
+var qualita_pp = document.getElementById('qualita_pp');
+var piove = document.getElementById('piove');
+let primoPianoContainer = document.getElementById('primoPianoContainer');
+let seminterratoContainer = document.getElementById('seminterratoContainer');
+let airRow1 = document.getElementById('airRow1');
+let airRow2 = document.getElementById('airRow2');
 let sidebar = document.querySelector(".sidebar");
 let closeBtn = document.querySelector("#btn");
 let searchBtn = document.querySelector(".bx-search");
 let logoutBtn = document.querySelector("#logout-button");
+let qPP = document.getElementById('qualityPrimoPiano');
+let qS = document.getElementById('qualitySeminterrato');
 
 closeBtn.addEventListener("click", () => {
     sidebar.classList.toggle("open");
@@ -44,9 +46,8 @@ logoutBtn.addEventListener("click", () => {
     console.log("Logout clicked");
     logout();
     setTimeout(function () {
-        window.location.reload()
+        window.location.reload();
     }, 2500);
-
 });
 
 function isMobileDevice() {
@@ -62,13 +63,9 @@ var windowWidth = window.innerWidth;
 var webWiew = 4;
 
 function updateWindowWidth() {
-
     windowWidth = window.innerWidth;
 
     if ((isMobileDevice() || windowWidth <= 1000) && webWiew != MOBILE) {
-        if (isMobileDevice()) {
-
-        }
         airRow2.appendChild(seminterratoContainer);
         webWiew = MOBILE;
     }
@@ -123,12 +120,33 @@ function updateCurrentAirQuality() {
         .catch(error => console.error('Error fetching bin data:', error));
 }
 
+function updateSummary() {
+    let co2Seminterrato = parseFloat(co2_s.innerHTML);
+    let qualitaSeminterrato = parseFloat(qualita_s.innerHTML);
+    let co2PrimoPiano = parseFloat(co2_pp.innerHTML);
+    let qualitaPrimoPiano = parseFloat(qualita_pp.innerHTML);
+
+    function calculateQuality(co2, qualita) {
+        if (co2 < 800 && qualita < 200) {
+            return "GOOD";
+        } else if ((co2 >= 800 && co2 < 1500) || (qualita >= 200 && qualita < 400)) {
+            return "MEDIOCRE";
+        } else {
+            return "BAD";
+        }
+    }
+
+    qS.innerHTML = calculateQuality(co2Seminterrato, qualitaSeminterrato);
+    qPP.innerHTML = calculateQuality(co2PrimoPiano, qualitaPrimoPiano);
+}
 
 document.addEventListener('DOMContentLoaded', function () {
-    updateCurrentAirQuality()
-    updateCurrentCo2()
-    setInterval(updateCurrentAirQuality, 5 * 1000); // Update every 5 minutes
-    setInterval(updateCurrentCo2, 5 * 1000); // Update every 5 minutes
+    updateCurrentAirQuality();
+    updateCurrentCo2();
+    updateSummary();
+    setInterval(updateCurrentAirQuality, 5 * 1000); // Update every 5 seconds
+    setInterval(updateCurrentCo2, 5 * 1000); // Update every 5 seconds
+    setInterval(updateSummary, 5 * 1000); // Update every 5 seconds
 });
 
 function setFullHeight() {
