@@ -14,6 +14,12 @@ let searchBtn = document.querySelector(".bx-search");
 let logoutBtn = document.querySelector("#logout-button");
 let qPP = document.getElementById('qualityPrimoPiano');
 let qS = document.getElementById('qualitySeminterrato');
+let qPPChip = document.getElementById('qualityPrimoPianoChip');
+let qSChip = document.getElementById('qualitySeminterratoChip');
+
+const COLOR_BAD = "#ef8b8b"
+const COLOR_WARNING = "#efd18b"
+const COLOR_GOOD = "#87bdf0"
 
 closeBtn.addEventListener("click", () => {
     sidebar.classList.toggle("open");
@@ -136,14 +142,25 @@ function updateSummary() {
         }
     }
 
+    function determineColor(co2, qualita) {
+        if (co2 < 550 && qualita < 500) {
+            return COLOR_GOOD;
+        } else if ((co2 >= 550 && co2 < 900) || (qualita >= 500 && qualita < 700)) {
+            return COLOR_WARNING;
+        } else {
+            return COLOR_BAD;
+        }
+    }
+
     qS.innerHTML = calculateQuality(co2Seminterrato, qualitaSeminterrato);
     qPP.innerHTML = calculateQuality(co2PrimoPiano, qualitaPrimoPiano);
+    qSChip.style.backgroundColor = determineColor(co2Seminterrato, qualitaSeminterrato);
+    qPPChip.style.backgroundColor = determineColor(co2PrimoPiano, qualitaPrimoPiano);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     updateCurrentAirQuality();
     updateCurrentCo2();
-    updateSummary();
     setInterval(updateCurrentAirQuality, 5 * 1000); // Update every 5 seconds
     setInterval(updateCurrentCo2, 5 * 1000); // Update every 5 seconds
     setInterval(updateSummary, 5 * 1000); // Update every 5 seconds
