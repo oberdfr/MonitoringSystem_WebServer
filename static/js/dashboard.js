@@ -29,11 +29,11 @@ let globeResult = document.createElement('div');
 globeResult.id = 'globeResult';
 globeResult.className = 'result_black col';
 globeResult.style.height = '500px';
-globeResult.style.width = 'calc(100% + 5px)';
+globeResult.style.width = '600px';
 globeResult.style.marginTop = '0px';
 globeResult.style.marginBottom = '0px';
 globeResult.innerHTML = `
-            <div class="globeContainer" id="globe-container" style="height: 480px; width: 580px;"></div>
+            <div class="globeContainer" id="globe-container" style="height: 480px; width: 97.5%;"></div>
         `;
 
 const DESKTOP_BIG = 1;
@@ -52,6 +52,7 @@ function updateWindowWidth() {
 
     if ((isMobileDevice() || windowWidth <= 1000) && webWiew != MOBILE) {
         if (!isMobileDevice()) {
+            globeResult.style.width = '97.5%';
             firstRowDashboard.appendChild(globeResult);
         }
         paperContainerMobile.appendChild(paperChartResult);
@@ -64,6 +65,7 @@ function updateWindowWidth() {
             firstRowDashboard.appendChild(globeResult);
         }
         if (!isMobileDevice()) {
+            globeResult.style.width = '97.5%';
             firstRowDashboard.appendChild(globeResult);
         }
         secondRowDashboard.appendChild(paperChartResult);
@@ -76,6 +78,7 @@ function updateWindowWidth() {
             firstRowDashboard.appendChild(globeResult);
         }
         if (!isMobileDevice()) {
+            globeResult.style.width = '580px';
             firstRowDashboard.appendChild(globeResult);
         }
         firstRowDashboard.appendChild(paperChartResult);
