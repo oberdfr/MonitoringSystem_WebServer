@@ -11,6 +11,14 @@ let plasticChartResult = document.getElementById("plasticChartResult");
 let paperContainerMobile = document.getElementById("paperContainerMobile");
 let plasticContainerMobile = document.getElementById("plasticContainerMobile");
 let mobileBinsContainer = document.querySelector("#mobileBinsContainer");
+let qPP = document.getElementById('qualityPrimoPiano');
+let qS = document.getElementById('qualitySeminterrato');
+let qPPChip = document.getElementById('qualityPrimoPianoChip');
+let qSChip = document.getElementById('qualitySeminterratoChip');
+
+const COLOR_BAD = "#ef8b8b"
+const COLOR_WARNING = "#efd18b"
+const COLOR_GOOD = "#87bdf0"
 
 function isMobileDevice() {
     console.log(/Mobi|Android|iPad|iPhone|iPod/.test(navigator.userAgent));
@@ -159,4 +167,88 @@ function updateBinData() {
 document.addEventListener('DOMContentLoaded', function () {
     updateBinData();
     setInterval(updateBinData, 1 * 5000); // Update every 5 seconds
+});
+
+async function getCurrentCo2S() {
+    try {
+        let response = await fetch('/latestco2s');
+        let data = await response.json();
+        console.log(data);
+        return data.MQ7;
+    } catch (error) {
+        console.error('Error fetching CO2 data for Seminterrato:', error);
+        return null; // Return null if there's an error
+    }
+}
+
+async function getCurrentCo2PP() {
+    try {
+        let response = await fetch('/latestco2pp');
+        let data = await response.json();
+        console.log(data);
+        return data.MQ7;
+    } catch (error) {
+        console.error('Error fetching CO2 data for Primo Piano:', error);
+        return null; // Return null if there's an error
+    }
+}
+
+async function getCurrentAirQualityS() {
+    try {
+        let response = await fetch('/latestairqualitys');
+        let data = await response.json();
+        console.log(data);
+        return data.MQ2;
+    } catch (error) {
+        console.error('Error fetching air quality data for Seminterrato:', error);
+        return null; // Return null if there's an error
+    }
+}
+
+async function getCurrentAirQualityPP() {
+    try {
+        let response = await fetch('/latestairqualitypp');
+        let data = await response.json();
+        console.log(data);
+        return data.MQ2;
+    } catch (error) {
+        console.error('Error fetching air quality data for Primo Piano:', error);
+        return null; // Return null if there's an error
+    }
+}
+
+async function updateSummary() {
+    let co2Seminterrato = await getCurrentCo2S();
+    let qualitaSeminterrato = await getCurrentAirQualityS();
+    let co2PrimoPiano = await getCurrentCo2PP();
+    let qualitaPrimoPiano = await getCurrentAirQualityPP();
+
+    function calculateQuality(co2, qualita) {
+        if (co2 < 550 && qualita < 500) {
+            return "GOOD";
+        } else if ((co2 >= 550 && co2 < 900) || (qualita >= 500 && qualita < 700)) {
+            return "MEDIOCRE";
+        } else {
+            return "BAD";
+        }
+    }
+
+    function determineColor(co2, qualita) {
+        if (co2 < 550 && qualita < 500) {
+            return COLOR_GOOD;
+        } else if ((co2 >= 550 && co2 < 900) || (qualita >= 500 && qualita < 700)) {
+            return COLOR_WARNING;
+        } else {
+            return COLOR_BAD;
+        }
+    }
+
+    qS.innerHTML = calculateQuality(co2Seminterrato, qualitaSeminterrato);
+    qPP.innerHTML = calculateQuality(co2PrimoPiano, qualitaPrimoPiano);
+    qSChip.style.backgroundColor = determineColor(co2Seminterrato, qualitaSeminterrato);
+    qPPChip.style.backgroundColor = determineColor(co2PrimoPiano, qualitaPrimoPiano);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    setInterval(updateSummary, 2.5 * 1000); // Update every 2.5 seconds
 });
