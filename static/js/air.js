@@ -40,7 +40,7 @@ function menuBtnChange() {
 }
 
 function logout() {
-    fetch("http://192.168.11.29:5000/logout", { credentials: 'include' })
+    fetch("http://192.168.11.202:5000/logout", { credentials: 'include' })
         .then(response => response.json())
         .then(data => {
             console.log(data.status);
@@ -133,9 +133,9 @@ function updateSummary() {
     let qualitaPrimoPiano = parseFloat(qualita_pp.innerHTML);
 
     function calculateQuality(co2, qualita) {
-        if (co2 < 550 && qualita < 500) {
+        if (co2 < 650 && qualita < 650) {
             return "GOOD";
-        } else if ((co2 >= 550 && co2 < 900) || (qualita >= 500 && qualita < 700)) {
+        } else if ((co2 >= 650 && co2 < 900) || (qualita >= 650 && qualita < 750)) {
             return "MEDIOCRE";
         } else {
             return "BAD";
@@ -143,9 +143,9 @@ function updateSummary() {
     }
 
     function determineColor(co2, qualita) {
-        if (co2 < 550 && qualita < 500) {
+        if (co2 < 650 && qualita < 650) {
             return COLOR_GOOD;
-        } else if ((co2 >= 550 && co2 < 900) || (qualita >= 500 && qualita < 700)) {
+        } else if ((co2 >= 650 && co2 < 900) || (qualita >= 650 && qualita < 750)) {
             return COLOR_WARNING;
         } else {
             return COLOR_BAD;

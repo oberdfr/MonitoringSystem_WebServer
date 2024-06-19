@@ -149,7 +149,7 @@ def error():
 
 @app.route('/sendqoapp')
 def getQoaPP():
-    misMQ2 = request.args.get("qa")
+    misMQ2 = str(int(request.args.get("qa")) - 600)
     misMQ7 = request.args.get("co2")
     print("qualita: ")
     print(misMQ2)
