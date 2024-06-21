@@ -173,3 +173,40 @@ function setFullHeight() {
 
 window.addEventListener('resize', setFullHeight);
 window.addEventListener('DOMContentLoaded', setFullHeight);
+
+const apiKey = 'f46f2ab508deea1aba7c8658b207aa5d';
+// Coordinate Intuita
+const lat = 43.91191667;
+const lon = 12.90136111;
+ 
+// URL dell'API con le coordinate della città e API key
+const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
+ 
+// Funzione per aggiornare il DOM con le informazioni meteo
+function updateWeather(data) {
+    const temperature = data.main.temp;
+    const rain = data.weather.some(item => item.main.toLowerCase() === 'rain') ? 'Yes' : 'No';
+ 
+    document.getElementById('temperature').textContent = temperature + " ℃";
+    document.getElementById('rain').textContent = rain;
+}
+ 
+// Funzione per ottenere le informazioni meteo
+async function getWeather() {
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        updateWeather(data);
+    } catch (error) {
+        console.error('Error fetching the weather data:', error);
+    }
+}
+ 
+document.addEventListener('DOMContentLoaded', function () {
+    getWeather()
+    setInterval(getWeather, 5 * 60 * 1000); // Update every 2.5 seconds
+});
+ 
